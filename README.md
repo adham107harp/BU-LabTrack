@@ -1,7 +1,5 @@
 # Lab Tracking System
 
-![Lab Tracking System Banner](https://via.placeholder.com/1280x400?text=Lab+Tracking+System) <!-- Replace with actual image URL if available -->
-
 ## Overview
 
 The Lab Tracking System is a web-based application designed to manage and monitor laboratory equipment, facilitate tool sharing among students, and optimize research lab bookings. This project aims to enhance laboratory operations by automating equipment tracking, maintenance scheduling, and usage reporting. It supports QR/Barcode scanning, real-time dashboards, role-based access control, notifications, and analytics to improve efficiency, accountability, and transparency while reducing manual errors.
