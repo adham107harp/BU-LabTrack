@@ -94,11 +94,12 @@ This project was developed by:
 - Rewan Ibrahim
 - Adham Mohammed
 - Sayed Eissa
+- Nada Moataz
 
 Under supervision of:
-- Dr. Ahmed Maghawry
-- Eng. Nouran Mohammed
-- Eng. Mohammed Abdouh
+- Dr.Marwa Elanany
+- Eng.Mohammed Khaled
+- Eng.Ziad Nabil
 
 ## Commit Guidelines
 
