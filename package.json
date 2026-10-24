@@ -1,6 +1,6 @@
 
   {
-      "name": "Lab Tracking System Website",
+      "name": "bu-labtrack",
       "version": "0.1.0",
       "private": true,
       "dependencies": {
