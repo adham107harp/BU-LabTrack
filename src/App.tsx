@@ -6,7 +6,7 @@ import { RegisterTechnician } from './components/RegisterTechnician';
 import { RegisterDoctor } from './components/RegisterDoctor';
 import { MainApp } from './components/MainApp';
 import { AboutLanding } from './components/AboutLanding';
-import { removeAuthToken } from './services/api';
+import { removeAuthToken, DEMO_MODE } from './services/api';
 
 export type UserRole = 'student' | 'doctor' | 'instructor' | 'technician';
 
@@ -51,6 +51,11 @@ export default function App() {
   return (
     <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
       <div className={darkMode ? 'dark' : ''}>
+        {DEMO_MODE && (
+          <div className="bg-[#1E3A5F] text-white text-center text-xs py-1 px-4">
+            Demo mode: sample data only, nothing is saved and it resets when you reload.
+          </div>
+        )}
         {currentView === 'about' && <AboutLanding onGetStarted={() => setCurrentView('login')} />}
         {currentView === 'login' && <Login onLogin={handleLogin} onShowRegister={(type?: string) => {
           if (type === 'instructor') setCurrentView('registerInstructor');

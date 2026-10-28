@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Beaker, LogIn, Moon, Sun, UserPlus } from 'lucide-react';
 import { User, UserRole, useDarkMode } from '../App';
-import { api } from '../services/api';
+import { api, DEMO_MODE } from '../services/api';
+import { DEMO_ACCOUNTS } from '../services/demoBackend';
 
 interface LoginProps {
   onLogin: (user: User) => void;
@@ -71,6 +72,29 @@ export function Login({ onLogin, onShowRegister }: LoginProps) {
           {error && (
             <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg text-sm">
               {error}
+            </div>
+          )}
+
+          {DEMO_MODE && (
+            <div className="mb-4 p-3 rounded-lg border-2 border-dashed border-[#1E3A5F]/40 dark:border-[#8BB4D9]/40 text-sm">
+              <p className="mb-2 text-gray-700 dark:text-[#B0B0B0]">
+                Demo mode: pick an account to fill the form (any password works).
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {DEMO_ACCOUNTS.map((account) => (
+                  <button
+                    key={account.email}
+                    type="button"
+                    onClick={() => {
+                      setEmail(account.email);
+                      setPassword('demo');
+                    }}
+                    className="text-xs px-3 py-2 capitalize bg-[#1E3A5F]/10 dark:bg-[#8BB4D9]/10 text-[#1E3A5F] dark:text-[#8BB4D9] rounded-lg hover:bg-[#1E3A5F]/20 dark:hover:bg-[#8BB4D9]/20 transition-all"
+                  >
+                    {account.role}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
