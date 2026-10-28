@@ -1,10 +1,14 @@
 
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
+  import tailwindcss from '@tailwindcss/vite';
   import path from 'path';
 
-  export default defineConfig({
-    plugins: [react()],
+  export default defineConfig(({ mode }) => ({
+    // Relative asset paths in demo builds so they can be hosted from a
+    // sub-folder (e.g. GitHub Pages at /BU-LabTrack/).
+    base: mode === 'demo' ? './' : '/',
+    plugins: [react(), tailwindcss()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -57,4 +61,4 @@
       port: 3000,
       open: true,
     },
-  });
+  }));
