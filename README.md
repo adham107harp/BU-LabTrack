@@ -4,6 +4,8 @@ A web app for managing university labs at **Badya University**: browse lab rooms
 
 > **This repository contains the React frontend.** It talks to a REST API (see [Backend](#backend)), and it also has a built-in **demo mode** with sample data, so you can try every screen without the backend.
 
+**Live demo:** https://adham107harp.github.io/BU-LabTrack/ (sample data, no sign-up needed)
+
 ![Student dashboard](docs/screenshots/student-dashboard.webp)
 
 ## Try it in 1 minute (demo mode)
