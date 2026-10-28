@@ -37,7 +37,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
       const allReservations: Reservation[] = await api.get('/reservations');
       const pending = allReservations.filter(res => 
         res.status === 'PENDING' && 
-        myLabs.some(lab => lab.labId === res.equipment.lab?.labId)
+        // Use the labs fetched above: the myLabs state is not updated until
+        // the next render, so on first load it is still empty.
+        instructorLabs.some(lab => lab.labId === res.equipment?.lab?.labId)
       );
       setPendingReservations(pending);
     } catch (err: any) {

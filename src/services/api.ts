@@ -1,4 +1,13 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+import { demoBackend } from './demoBackend';
+
+// Set VITE_API_BASE_URL in a .env file to point at another backend.
+const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+
+// Demo mode answers every request from an in-memory sample backend
+// (src/services/demoBackend.ts), so the UI can be tried without the API.
+// Enabled by `npm run dev:demo` / `npm run build:demo`, or VITE_DEMO_MODE=true.
+export const DEMO_MODE: boolean =
+  import.meta.env.MODE === 'demo' || import.meta.env.VITE_DEMO_MODE === 'true';
 
 export interface RegisterRequest {
   studentId?: number;
@@ -64,6 +73,7 @@ export const removeAuthToken = () => {
 // API functions
 export const api = {
   async register(data: RegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) { const r = await demoBackend.register('student', data); setAuthToken(r.token); return r; }
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: {
@@ -83,6 +93,7 @@ export const api = {
   },
 
   async registerInstructor(data: InstructorRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) { const r = await demoBackend.register('instructor', data); setAuthToken(r.token); return r; }
     const response = await fetch(`${API_BASE_URL}/auth/register/instructor`, {
       method: 'POST',
       headers: {
@@ -102,6 +113,7 @@ export const api = {
   },
 
   async registerTechnician(data: TechnicianRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) { const r = await demoBackend.register('technician', data); setAuthToken(r.token); return r; }
     const response = await fetch(`${API_BASE_URL}/auth/register/technician`, {
       method: 'POST',
       headers: {
@@ -121,6 +133,7 @@ export const api = {
   },
 
   async registerDoctor(data: DoctorRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) { const r = await demoBackend.register('doctor', data); setAuthToken(r.token); return r; }
     const response = await fetch(`${API_BASE_URL}/auth/register/doctor`, {
       method: 'POST',
       headers: {
@@ -140,6 +153,7 @@ export const api = {
   },
 
   async login(data: LoginRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) { const r = await demoBackend.login(data.email); setAuthToken(r.token); return r; }
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
@@ -159,6 +173,7 @@ export const api = {
   },
 
   async get(endpoint: string): Promise<any> {
+    if (DEMO_MODE) return demoBackend.get(endpoint);
     const token = getAuthToken();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'GET',
@@ -181,6 +196,7 @@ export const api = {
   },
 
   async post(endpoint: string, data: any): Promise<any> {
+    if (DEMO_MODE) return demoBackend.post(endpoint, data);
     const token = getAuthToken();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
@@ -204,6 +220,7 @@ export const api = {
   },
 
   async put(endpoint: string, data: any): Promise<any> {
+    if (DEMO_MODE) return demoBackend.put(endpoint, data);
     const token = getAuthToken();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
@@ -227,6 +244,7 @@ export const api = {
   },
 
   async delete(endpoint: string): Promise<void> {
+    if (DEMO_MODE) return demoBackend.delete(endpoint);
     const token = getAuthToken();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'DELETE',

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* The app toggles dark mode with a .dark class on a wrapper element
+   (see App.tsx), not with the OS colour-scheme setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Light Mode Colors - Very Light Backgrounds with Dark Text */
   --color-bg-primary: #FFFFFF;
