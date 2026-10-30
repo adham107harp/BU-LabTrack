@@ -50,8 +50,12 @@ export function Register({ onRegister, onBackToLogin }: RegisterProps) {
         password: formData.password,
       });
 
+      if (response.studentId == null) {
+        throw new Error('Registration succeeded but the server returned no student ID.');
+      }
+
       const user: User = {
-        id: response.studentId.toString(),
+        id: String(response.studentId),
         name: response.name,
         email: response.email,
         role: response.role as UserRole,
