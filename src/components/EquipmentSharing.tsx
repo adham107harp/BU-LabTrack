@@ -41,7 +41,7 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
         setLoading(true);
         setError(null);
         const backendTools: SharedTool[] = await api.get('/shared-tools');
-        
+
         // Map backend tools to frontend format
         const mappedItems: SharedItem[] = backendTools.map((tool) => ({
           id: tool.toolId,
@@ -67,13 +67,14 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
     fetchSharedTools();
   }, []);
 
-  const myItems = sharedItems.filter(item => item.ownerId === parseInt(user.id));
+  const myItems = sharedItems.filter((item) => item.ownerId === parseInt(user.id));
   const displayItems = filter === 'my-items' ? myItems : sharedItems;
 
-  const filteredItems = displayItems.filter(item =>
-    item.equipmentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredItems = displayItems.filter(
+    (item) =>
+      item.equipmentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleContact = (item: SharedItem) => {
@@ -85,7 +86,7 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
 
     try {
       await api.delete(`/shared-tools/${itemId}?ownerStudentId=${ownerId}`);
-      setSharedItems(sharedItems.filter(item => item.id !== itemId));
+      setSharedItems(sharedItems.filter((item) => item.id !== itemId));
     } catch (err: any) {
       alert(err.message || 'Failed to delete item');
       console.error('Error deleting shared tool:', err);
@@ -143,7 +144,9 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-[#1E3A5F] dark:text-[#2C5282]">Equipment Sharing</h1>
-          <p className="text-[#2D3748] dark:text-[#B8B8B8] mt-1">Share and borrow equipment with fellow students</p>
+          <p className="text-[#2D3748] dark:text-[#B8B8B8] mt-1">
+            Share and borrow equipment with fellow students
+          </p>
         </div>
         <button
           onClick={() => {
@@ -206,7 +209,9 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
       {loading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-[#1E3A5F] dark:text-[#2C5282] animate-spin" />
-          <span className="ml-3 text-[#2D3748] dark:text-[#B8B8B8]">Loading shared equipment...</span>
+          <span className="ml-3 text-[#2D3748] dark:text-[#B8B8B8]">
+            Loading shared equipment...
+          </span>
         </div>
       )}
 
@@ -215,20 +220,24 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
         <>
           {filteredItems.length === 0 ? (
             <div className="bg-[#F8F9FA] dark:bg-[#2D2D2D] rounded-lg shadow p-12 text-center text-[#2D3748] dark:text-[#B8B8B8] border border-[#E2E8F0] dark:border-[#4A4A4A]">
-              {searchTerm ? 'No shared items found matching your search.' : 'No shared items available yet.'}
+              {searchTerm
+                ? 'No shared items found matching your search.'
+                : 'No shared items available yet.'}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredItems.map((item, index) => (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   className="bg-[#F8F9FA] dark:bg-[#2D2D2D] rounded-lg shadow hover:shadow-lg transition-all duration-300 transform hover:scale-105 border border-[#E2E8F0] dark:border-[#4A4A4A] animate-scaleIn"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">{item.equipmentName}</h3>
+                        <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">
+                          {item.equipmentName}
+                        </h3>
                         <span className="inline-block px-2 py-1 bg-[#EDF2F7] dark:bg-[#3D3D3D] text-[#1E3A5F] dark:text-[#2C5282] rounded text-xs">
                           {item.category}
                         </span>
@@ -245,14 +254,16 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
                     </div>
 
                     {item.imageUrl && (
-                      <img 
-                        src={item.imageUrl} 
+                      <img
+                        src={item.imageUrl}
                         alt={item.equipmentName}
                         className="w-full h-32 object-cover rounded-lg mb-4"
                       />
                     )}
 
-                    <p className="text-[#2D3748] dark:text-[#B8B8B8] text-sm mb-4">{item.description}</p>
+                    <p className="text-[#2D3748] dark:text-[#B8B8B8] text-sm mb-4">
+                      {item.description}
+                    </p>
 
                     <div className="pt-4 border-t border-[#E2E8F0] dark:border-[#4A4A4A]">
                       <div className="flex items-center gap-2 mb-3">
@@ -261,7 +272,9 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
                         </div>
                         <div className="text-sm">
                           <p className="text-[#1A202C] dark:text-white">{item.ownerName}</p>
-                          <p className="text-[#2D3748] dark:text-[#B8B8B8] text-xs">{item.postedDate}</p>
+                          <p className="text-[#2D3748] dark:text-[#B8B8B8] text-xs">
+                            {item.postedDate}
+                          </p>
                         </div>
                       </div>
 
@@ -275,7 +288,7 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
                         </button>
                       )}
                       {item.ownerId === parseInt(user.id) && (
-                        <button 
+                        <button
                           className="w-full px-4 py-2 bg-[#EDF2F7] dark:bg-[#3D3D3D] text-[#1E3A5F] dark:text-[#2C5282] rounded-lg hover:bg-[#E2E8F0] dark:hover:bg-[#4A4A4A] transition-colors"
                           disabled
                         >
@@ -313,10 +326,12 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
                 {formError}
               </div>
             )}
-            
+
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-[#1A202C] dark:text-[#B8B8B8] mb-2">Equipment Name</label>
+                <label className="block text-[#1A202C] dark:text-[#B8B8B8] mb-2">
+                  Equipment Name
+                </label>
                 <input
                   type="text"
                   required
@@ -340,7 +355,9 @@ export function EquipmentSharing({ user }: EquipmentSharingProps) {
               </div>
 
               <div>
-                <label className="block text-[#1A202C] dark:text-[#B8B8B8] mb-2">Image URL (Optional)</label>
+                <label className="block text-[#1A202C] dark:text-[#B8B8B8] mb-2">
+                  Image URL (Optional)
+                </label>
                 <input
                   type="url"
                   value={imageUrl}

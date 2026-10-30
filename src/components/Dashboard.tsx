@@ -1,5 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Users, Beaker, AlertCircle, CheckCircle, Package, Share2, FlaskConical, Info, ArrowRight, Loader2 } from 'lucide-react';
+import {
+  Users,
+  Beaker,
+  AlertCircle,
+  CheckCircle,
+  Package,
+  Share2,
+  FlaskConical,
+  Info,
+  ArrowRight,
+  Loader2,
+} from 'lucide-react';
 import { User } from '../App';
 import { api } from '../services/api';
 
@@ -48,7 +59,7 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
         const [allLabs, availableLabs, myReservations, mySharedTools] = await Promise.all([
           api.get('/labs').catch(() => []),
           api.get('/labs/available').catch(() => []),
-          user.role === 'student' 
+          user.role === 'student'
             ? api.get(`/reservations/student/${user.id}`).catch(() => [])
             : Promise.resolve([]),
           user.role === 'student'
@@ -65,9 +76,12 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
           },
           {
             label: user.role === 'student' ? 'My Reservations' : 'Active Sessions',
-            value: user.role === 'student' 
-              ? myReservations.filter((r: any) => r.status === 'APPROVED' || r.status === 'PENDING').length.toString()
-              : '0', // TODO: Add active sessions for doctors
+            value:
+              user.role === 'student'
+                ? myReservations
+                    .filter((r: any) => r.status === 'APPROVED' || r.status === 'PENDING')
+                    .length.toString()
+                : '0', // TODO: Add active sessions for doctors
             icon: Users,
             color: 'bg-gradient-to-br from-[#F6995C] to-[#51829B] text-white',
           },
@@ -79,9 +93,7 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
           },
           {
             label: user.role === 'student' ? 'Shared Items' : 'Maintenance',
-            value: user.role === 'student' 
-              ? mySharedTools.length.toString()
-              : '0', // TODO: Add maintenance requests count
+            value: user.role === 'student' ? mySharedTools.length.toString() : '0', // TODO: Add maintenance requests count
             icon: AlertCircle,
             color: 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300',
           },
@@ -119,13 +131,17 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
       color: 'from-[#E53E3E] to-[#1E3A5F]',
       tab: 'sharing',
     },
-    ...(user.role === 'doctor' ? [{
-      icon: FlaskConical,
-      title: 'Research Lab',
-      description: 'Access advanced research facilities',
-      color: 'from-[#1E3A5F] to-[#E53E3E]',
-      tab: 'research',
-    }] : []),
+    ...(user.role === 'doctor'
+      ? [
+          {
+            icon: FlaskConical,
+            title: 'Research Lab',
+            description: 'Access advanced research facilities',
+            color: 'from-[#1E3A5F] to-[#E53E3E]',
+            tab: 'research',
+          },
+        ]
+      : []),
     {
       icon: Info,
       title: 'About',
@@ -140,7 +156,9 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-[#1E3A5F] to-[#2C5282] dark:from-[#2F3541] dark:to-[#252932] text-white rounded-lg shadow-lg p-6 animate-slideInLeft border-2 border-[#E53E3E]">
         <h1 className="text-white mb-2">Welcome back, {user.name}!</h1>
-        <p className="text-white/90 dark:text-[#9BB0C1]">Here's what's happening in your labs today</p>
+        <p className="text-white/90 dark:text-[#9BB0C1]">
+          Here's what's happening in your labs today
+        </p>
       </div>
 
       {/* Error Message */}
@@ -153,8 +171,8 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-scaleIn border-2 border-[#E2E8F0] dark:border-[#3A4150]"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
@@ -166,7 +184,7 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
                     <Loader2 className="w-6 h-6 text-[#1E3A5F] dark:text-[#9BB0C1] animate-spin" />
                   </div>
                 ) : (
-                   <p className="text-3xl mt-2 text-[#1E3A5F] dark:text-[#9BB0C1]">{stat.value}</p>
+                  <p className="text-3xl mt-2 text-[#1E3A5F] dark:text-[#9BB0C1]">{stat.value}</p>
                 )}
               </div>
               <div className={`p-3 rounded-lg shadow-md ${stat.color}`}>
@@ -179,25 +197,25 @@ export function Dashboard({ user, onNavigate }: DashboardProps) {
 
       {/* Navigation Cards */}
       <div>
-         <h2 className="mb-4 text-[#1E3A5F] dark:text-[#9BB0C1]">Navigate</h2>
+        <h2 className="mb-4 text-[#1E3A5F] dark:text-[#9BB0C1]">Navigate</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {navigationCards.map((card, index) => (
             <div
               key={index}
               onClick={() => onNavigate(card.tab)}
-               className="group cursor-pointer bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden animate-scaleIn border-2 border-[#E2E8F0] dark:border-[#3A4150]"
+              className="group cursor-pointer bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden animate-scaleIn border-2 border-[#E2E8F0] dark:border-[#3A4150]"
               style={{ animationDelay: `${(index + 4) * 0.1}s` }}
             >
               <div className={`h-2 bg-gradient-to-r ${card.color}`}></div>
               <div className="p-6">
-                <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${card.color} rounded-lg mb-4 shadow-md`}>
+                <div
+                  className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${card.color} rounded-lg mb-4 shadow-md`}
+                >
                   <card.icon className="w-6 h-6 text-white" />
                 </div>
-                 <h3 className="mb-2 text-[#1E3A5F] dark:text-[#9BB0C1]">{card.title}</h3>
-                <p className="text-gray-600 dark:text-[#B0B0B0] text-sm mb-4">
-                  {card.description}
-                </p>
-                 <div className="flex items-center text-[#E53E3E] text-sm group-hover:gap-2 transition-all">
+                <h3 className="mb-2 text-[#1E3A5F] dark:text-[#9BB0C1]">{card.title}</h3>
+                <p className="text-gray-600 dark:text-[#B0B0B0] text-sm mb-4">{card.description}</p>
+                <div className="flex items-center text-[#E53E3E] text-sm group-hover:gap-2 transition-all">
                   <span>Open</span>
                   <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                 </div>

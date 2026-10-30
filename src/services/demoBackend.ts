@@ -51,7 +51,11 @@ export const DEMO_ACCOUNTS: DemoUser[] = [
   { id: 4, name: 'Demo Doctor', email: 'doctor@demo.bu.edu', role: 'doctor' },
 ];
 
-const OTHER_INSTRUCTOR = { instructorId: 9, instructorName: 'Eng. Lab Supervisor', instructorEmail: 'supervisor@demo.bu.edu' };
+const OTHER_INSTRUCTOR = {
+  instructorId: 9,
+  instructorName: 'Eng. Lab Supervisor',
+  instructorEmail: 'supervisor@demo.bu.edu',
+};
 
 function day(offset: number): string {
   const d = new Date();
@@ -68,18 +72,66 @@ const users: DemoUser[] = [...DEMO_ACCOUNTS];
 let nextUserId = 100;
 
 const labs: Omit<Lab, 'equipmentList'>[] = [
-  { labId: 101, labName: 'Computer Networks Lab', location: 'Building A, 1', capacity: 30, requiredLevel: 1,
-    instructor: { instructorId: 2, instructorName: 'Demo Instructor', instructorEmail: 'instructor@demo.bu.edu' } },
-  { labId: 102, labName: 'Electronics Lab', location: 'Building A, 2', capacity: 25, requiredLevel: 2,
-    instructor: { instructorId: 2, instructorName: 'Demo Instructor', instructorEmail: 'instructor@demo.bu.edu' } },
-  { labId: 103, labName: 'AI & Data Science Lab', location: 'Building B, 3', capacity: 35, requiredLevel: 2,
-    instructor: OTHER_INSTRUCTOR },
-  { labId: 104, labName: 'Physics Lab', location: 'Building C, 1', capacity: 40, requiredLevel: 1,
-    instructor: OTHER_INSTRUCTOR },
-  { labId: 255, labName: 'IoT Research Lab', location: 'Research Center, 2', capacity: 12, requiredLevel: 4,
-    instructor: { instructorId: 2, instructorName: 'Demo Instructor', instructorEmail: 'instructor@demo.bu.edu' } },
-  { labId: 256, labName: 'Biomedical Research Lab', location: 'Research Center, 3', capacity: 10, requiredLevel: 4,
-    instructor: OTHER_INSTRUCTOR },
+  {
+    labId: 101,
+    labName: 'Computer Networks Lab',
+    location: 'Building A, 1',
+    capacity: 30,
+    requiredLevel: 1,
+    instructor: {
+      instructorId: 2,
+      instructorName: 'Demo Instructor',
+      instructorEmail: 'instructor@demo.bu.edu',
+    },
+  },
+  {
+    labId: 102,
+    labName: 'Electronics Lab',
+    location: 'Building A, 2',
+    capacity: 25,
+    requiredLevel: 2,
+    instructor: {
+      instructorId: 2,
+      instructorName: 'Demo Instructor',
+      instructorEmail: 'instructor@demo.bu.edu',
+    },
+  },
+  {
+    labId: 103,
+    labName: 'AI & Data Science Lab',
+    location: 'Building B, 3',
+    capacity: 35,
+    requiredLevel: 2,
+    instructor: OTHER_INSTRUCTOR,
+  },
+  {
+    labId: 104,
+    labName: 'Physics Lab',
+    location: 'Building C, 1',
+    capacity: 40,
+    requiredLevel: 1,
+    instructor: OTHER_INSTRUCTOR,
+  },
+  {
+    labId: 255,
+    labName: 'IoT Research Lab',
+    location: 'Research Center, 2',
+    capacity: 12,
+    requiredLevel: 4,
+    instructor: {
+      instructorId: 2,
+      instructorName: 'Demo Instructor',
+      instructorEmail: 'instructor@demo.bu.edu',
+    },
+  },
+  {
+    labId: 256,
+    labName: 'Biomedical Research Lab',
+    location: 'Research Center, 3',
+    capacity: 10,
+    requiredLevel: 4,
+    instructor: OTHER_INSTRUCTOR,
+  },
 ];
 
 const equipment: StoredEquipment[] = [
@@ -103,46 +155,159 @@ const student = (id: number) => {
   return { studentId: u.id, name: u.name, email: u.email };
 };
 
-const reservations: { id: number; equipmentName: string; studentId: number; date: string; time: string;
-  duration: number; purpose: string; reservationType: string; teamSize: number;
-  status: Reservation['status'] }[] = [
-  { id: 1, equipmentName: 'Cisco Router 2901', studentId: 1, date: day(1), time: '10:00', duration: 90,
-    purpose: 'Routing lab assignment', reservationType: 'EQUIPMENT', teamSize: 3, status: 'APPROVED' },
-  { id: 2, equipmentName: 'Digital Oscilloscope', studentId: 1, date: day(2), time: '13:00', duration: 60,
-    purpose: 'Signals course project', reservationType: 'EQUIPMENT', teamSize: 2, status: 'PENDING' },
-  { id: 3, equipmentName: 'Soldering Station', studentId: 1, date: day(-3), time: '09:00', duration: 120,
-    purpose: 'Sensor board prototype', reservationType: 'EQUIPMENT', teamSize: 1, status: 'REJECTED' },
-  { id: 4, equipmentName: 'Cisco Switch 2960', studentId: 1, date: day(3), time: '11:00', duration: 60,
-    purpose: 'VLAN practice', reservationType: 'EQUIPMENT', teamSize: 4, status: 'PENDING' },
+const reservations: {
+  id: number;
+  equipmentName: string;
+  studentId: number;
+  date: string;
+  time: string;
+  duration: number;
+  purpose: string;
+  reservationType: string;
+  teamSize: number;
+  status: Reservation['status'];
+}[] = [
+  {
+    id: 1,
+    equipmentName: 'Cisco Router 2901',
+    studentId: 1,
+    date: day(1),
+    time: '10:00',
+    duration: 90,
+    purpose: 'Routing lab assignment',
+    reservationType: 'EQUIPMENT',
+    teamSize: 3,
+    status: 'APPROVED',
+  },
+  {
+    id: 2,
+    equipmentName: 'Digital Oscilloscope',
+    studentId: 1,
+    date: day(2),
+    time: '13:00',
+    duration: 60,
+    purpose: 'Signals course project',
+    reservationType: 'EQUIPMENT',
+    teamSize: 2,
+    status: 'PENDING',
+  },
+  {
+    id: 3,
+    equipmentName: 'Soldering Station',
+    studentId: 1,
+    date: day(-3),
+    time: '09:00',
+    duration: 120,
+    purpose: 'Sensor board prototype',
+    reservationType: 'EQUIPMENT',
+    teamSize: 1,
+    status: 'REJECTED',
+  },
+  {
+    id: 4,
+    equipmentName: 'Cisco Switch 2960',
+    studentId: 1,
+    date: day(3),
+    time: '11:00',
+    duration: 60,
+    purpose: 'VLAN practice',
+    reservationType: 'EQUIPMENT',
+    teamSize: 4,
+    status: 'PENDING',
+  },
 ];
 let nextReservationId = 5;
 
 let sharedTools: SharedTool[] = [
-  { toolId: 1, toolName: 'Arduino Uno Starter Kit', description: 'Full kit with breadboard, sensors and jumper wires.',
-    owner: student(1), contactEmail: 'student@demo.bu.edu' },
-  { toolId: 2, toolName: 'Digital Multimeter', description: 'Auto-ranging multimeter, good for circuits labs.',
-    owner: { studentId: 50, name: 'Omar (Year 3)', email: 'omar@demo.bu.edu' }, contactEmail: 'omar@demo.bu.edu' },
-  { toolId: 3, toolName: 'USB Logic Analyzer', description: '8 channels, 24 MHz. Works with PulseView.',
-    owner: { studentId: 51, name: 'Mariam (Year 4)', email: 'mariam@demo.bu.edu' }, contactEmail: 'mariam@demo.bu.edu' },
+  {
+    toolId: 1,
+    toolName: 'Arduino Uno Starter Kit',
+    description: 'Full kit with breadboard, sensors and jumper wires.',
+    owner: student(1),
+    contactEmail: 'student@demo.bu.edu',
+  },
+  {
+    toolId: 2,
+    toolName: 'Digital Multimeter',
+    description: 'Auto-ranging multimeter, good for circuits labs.',
+    owner: { studentId: 50, name: 'Omar (Year 3)', email: 'omar@demo.bu.edu' },
+    contactEmail: 'omar@demo.bu.edu',
+  },
+  {
+    toolId: 3,
+    toolName: 'USB Logic Analyzer',
+    description: '8 channels, 24 MHz. Works with PulseView.',
+    owner: { studentId: 51, name: 'Mariam (Year 4)', email: 'mariam@demo.bu.edu' },
+    contactEmail: 'mariam@demo.bu.edu',
+  },
 ];
 let nextToolId = 4;
 
-const research: { researchId: number; labId: number; doctorEmail: string; title: string; startDate: string; endDate: string }[] = [
-  { researchId: 1, labId: 255, doctorEmail: 'doctor@demo.bu.edu', title: 'Anomaly detection for IoT networks',
-    startDate: day(-120), endDate: day(90) },
-  { researchId: 2, labId: 256, doctorEmail: 'doctor@demo.bu.edu', title: 'Wearable ECG signal classification',
-    startDate: day(30), endDate: day(240) },
-  { researchId: 3, labId: 255, doctorEmail: 'doctor@demo.bu.edu', title: 'LoRaWAN coverage study on campus',
-    startDate: day(-300), endDate: day(-20) },
+const research: {
+  researchId: number;
+  labId: number;
+  doctorEmail: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+}[] = [
+  {
+    researchId: 1,
+    labId: 255,
+    doctorEmail: 'doctor@demo.bu.edu',
+    title: 'Anomaly detection for IoT networks',
+    startDate: day(-120),
+    endDate: day(90),
+  },
+  {
+    researchId: 2,
+    labId: 256,
+    doctorEmail: 'doctor@demo.bu.edu',
+    title: 'Wearable ECG signal classification',
+    startDate: day(30),
+    endDate: day(240),
+  },
+  {
+    researchId: 3,
+    labId: 255,
+    doctorEmail: 'doctor@demo.bu.edu',
+    title: 'LoRaWAN coverage study on campus',
+    startDate: day(-300),
+    endDate: day(-20),
+  },
 ];
 
 const maintenance: MaintenanceRequest[] = [
-  { maintenanceId: 1, equipmentName: 'Function Generator', technicianId: 3, requestDate: day(-2), status: 'PENDING',
-    description: 'Output amplitude drifts after 10 minutes of use.', maintenanceFrequencyDays: 180, estimatedDurationHours: 2 },
-  { maintenanceId: 2, equipmentName: 'LoRaWAN Gateway', technicianId: 3, requestDate: day(-6), status: 'IN_PROGRESS',
-    description: 'Firmware update and antenna check.', nextMaintenanceDate: day(1), estimatedDurationHours: 3 },
-  { maintenanceId: 3, equipmentName: 'Cisco Router 2901', technicianId: 3, requestDate: day(-30), status: 'COMPLETED',
-    description: 'Routine inspection.', maintenanceFrequencyDays: 90, estimatedDurationHours: 1 },
+  {
+    maintenanceId: 1,
+    equipmentName: 'Function Generator',
+    technicianId: 3,
+    requestDate: day(-2),
+    status: 'PENDING',
+    description: 'Output amplitude drifts after 10 minutes of use.',
+    maintenanceFrequencyDays: 180,
+    estimatedDurationHours: 2,
+  },
+  {
+    maintenanceId: 2,
+    equipmentName: 'LoRaWAN Gateway',
+    technicianId: 3,
+    requestDate: day(-6),
+    status: 'IN_PROGRESS',
+    description: 'Firmware update and antenna check.',
+    nextMaintenanceDate: day(1),
+    estimatedDurationHours: 3,
+  },
+  {
+    maintenanceId: 3,
+    equipmentName: 'Cisco Router 2901',
+    technicianId: 3,
+    requestDate: day(-30),
+    status: 'COMPLETED',
+    description: 'Routine inspection.',
+    maintenanceFrequencyDays: 90,
+    estimatedDurationHours: 1,
+  },
 ];
 
 // ---------------------------------------------------------------- helpers
@@ -182,8 +347,14 @@ function reservationDto(r: (typeof reservations)[number]): Reservation {
 }
 
 function researchDto(r: (typeof research)[number]): Research {
-  return { researchId: r.researchId, lab: labSummary(r.labId), doctorEmail: r.doctorEmail,
-    title: r.title, startDate: r.startDate, endDate: r.endDate };
+  return {
+    researchId: r.researchId,
+    lab: labSummary(r.labId),
+    doctorEmail: r.doctorEmail,
+    title: r.title,
+    startDate: r.startDate,
+    endDate: r.endDate,
+  };
 }
 
 function authResponse(u: DemoUser): AuthResponse {
@@ -217,7 +388,16 @@ export const demoBackend = {
     return authResponse(u);
   },
 
-  async register(role: Role, data: { name: string; email: string; studentId?: number; instructorId?: number; technicianId?: number }): Promise<AuthResponse> {
+  async register(
+    role: Role,
+    data: {
+      name: string;
+      email: string;
+      studentId?: number;
+      instructorId?: number;
+      technicianId?: number;
+    },
+  ): Promise<AuthResponse> {
     await latency();
     if (users.some((x) => x.email.toLowerCase() === data.email.toLowerCase())) {
       throw new Error('An account with this email already exists.');
@@ -236,7 +416,9 @@ export const demoBackend = {
 
     if (path === '/labs') return clone(labs.map(labDto));
     if (path === '/labs/available') {
-      return clone(labs.map(labDto).filter((l) => l.equipmentList?.some((e) => e.status === 'AVAILABLE')));
+      return clone(
+        labs.map(labDto).filter((l) => l.equipmentList?.some((e) => e.status === 'AVAILABLE')),
+      );
     }
     if (path === '/equipment') return clone(equipment.map(equipmentDto));
     if ((m = path.match(/^\/equipment\/lab\/(\d+)$/))) {
@@ -248,9 +430,14 @@ export const demoBackend = {
       const date = params.get('date');
       const start = minutes(params.get('startTime') || '00:00');
       const end = minutes(params.get('endTime') || '00:00');
-      return !reservations.some((r) =>
-        r.equipmentName === name && r.date === date && r.status !== 'REJECTED' &&
-        start < minutes(r.time) + r.duration && minutes(r.time) < end);
+      return !reservations.some(
+        (r) =>
+          r.equipmentName === name &&
+          r.date === date &&
+          r.status !== 'REJECTED' &&
+          start < minutes(r.time) + r.duration &&
+          minutes(r.time) < end,
+      );
     }
     if ((m = path.match(/^\/reservations\/student\/(\d+)$/))) {
       return clone(reservations.filter((r) => r.studentId === Number(m![1])).map(reservationDto));
@@ -270,16 +457,31 @@ export const demoBackend = {
     await latency();
     if (endpoint === '/reservations') {
       const req = data as CreateReservationRequest;
-      const r = { id: nextReservationId++, equipmentName: req.equipmentName, studentId: req.studentId,
-        date: req.date, time: req.time, duration: req.duration, purpose: req.purpose,
-        reservationType: req.reservationType, teamSize: req.teamSize, status: 'PENDING' as const };
+      const r = {
+        id: nextReservationId++,
+        equipmentName: req.equipmentName,
+        studentId: req.studentId,
+        date: req.date,
+        time: req.time,
+        duration: req.duration,
+        purpose: req.purpose,
+        reservationType: req.reservationType,
+        teamSize: req.teamSize,
+        status: 'PENDING' as const,
+      };
       reservations.push(r);
       return clone(reservationDto(r));
     }
     if (endpoint === '/shared-tools') {
       const req = data as CreateSharedToolRequest;
-      const tool: SharedTool = { toolId: nextToolId++, toolName: req.toolName, description: req.description,
-        imageUrl: req.imageUrl, owner: student(req.ownerStudentId), contactEmail: student(req.ownerStudentId).email };
+      const tool: SharedTool = {
+        toolId: nextToolId++,
+        toolName: req.toolName,
+        description: req.description,
+        imageUrl: req.imageUrl,
+        owner: student(req.ownerStudentId),
+        contactEmail: student(req.ownerStudentId).email,
+      };
       sharedTools.push(tool);
       return clone(tool);
     }
@@ -287,7 +489,11 @@ export const demoBackend = {
       if (equipment.some((e) => e.equipmentName === data.equipmentName)) {
         throw new Error('Equipment with this name already exists.');
       }
-      const e: StoredEquipment = { equipmentName: data.equipmentName, status: data.status || 'AVAILABLE', labId: data.labId };
+      const e: StoredEquipment = {
+        equipmentName: data.equipmentName,
+        status: data.status || 'AVAILABLE',
+        labId: data.labId,
+      };
       equipment.push(e);
       return clone(equipmentDto(e));
     }
