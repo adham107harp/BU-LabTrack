@@ -66,7 +66,7 @@ export function MainApp({ user, onLogout }: MainAppProps) {
               <button
                 onClick={() => setActiveTab('dashboard')}
                 className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-all duration-300 whitespace-nowrap ${
-                  activeTab === 'dashboard'
+                  (activeTab as Tab) === 'dashboard'
                     ? 'border-[#E53E3E] text-[#1E3A5F] dark:text-[#8BB4D9]'
                     : 'border-transparent text-[#2D3748] dark:text-[#B0B0B0] hover:text-[#1E3A5F] dark:hover:text-[#8BB4D9]'
                 }`}
@@ -146,7 +146,7 @@ export function MainApp({ user, onLogout }: MainAppProps) {
             ) : user.role === 'doctor' ? (
               <DoctorDashboard user={user} />
             ) : (
-              <Dashboard user={user} onNavigate={setActiveTab} />
+              <Dashboard user={user} onNavigate={(tab) => setActiveTab(tab as Tab)} />
             )
           )}
         {activeTab === 'labs' && <LabRooms user={user} onNavigateToReservation={() => setActiveTab('reservation')} />}
