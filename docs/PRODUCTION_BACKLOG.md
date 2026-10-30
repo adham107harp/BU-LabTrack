@@ -6,10 +6,11 @@ Updated at the end of every automated run.
 - 2026-10-30: strict `tsconfig.json` + `npm run typecheck` (fixed 3 real type errors, removed version suffixes from shadcn imports).
 - 2026-10-30: Vitest + Testing Library set up (`npm test`); 15 service-level tests covering student, instructor, technician and doctor demo flows.
 - 2026-10-30: CI workflow (`.github/workflows/ci.yml`): typecheck, tests, build, build:demo.
+- 2026-10-30: ESLint 9 flat config (`npm run lint`, errors fail CI; `any` and React-compiler rules are warnings for now). Login component tests (4 roles + failure path); suite is 20 tests.
 
 ## Next (highest value first)
-1. ESLint + Prettier configs and CI step.
-2. Component tests (Login, role dashboards) with Testing Library.
+1. Prettier config (needs a one-off repo-wide format commit), then burn down ESLint warnings (45 `any`, 8 react-hooks warnings: fetch-in-effect / hoisted callbacks in dashboards).
+2. Component tests for the role dashboards, reservation and maintenance screens.
 3. Playwright e2e against `build:demo`.
 4. Token storage: JWT lives in `localStorage` (`authToken`) - XSS-readable; move to httpOnly cookie once the API supports it, or at minimum add expiry handling and clear on 401.
 5. `api.ts` duplicates fetch/error handling per method and returns `any`; extract a typed `request()` helper; non-JSON error bodies currently throw on `response.json()`.
