@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Beaker, Layout, Package, Share2, FlaskConical, Info, LogOut, Moon, Sun } from 'lucide-react';
+import {
+  Beaker,
+  Layout,
+  Package,
+  Share2,
+  FlaskConical,
+  Info,
+  LogOut,
+  Moon,
+  Sun,
+} from 'lucide-react';
 import { User, useDarkMode } from '../App';
 import { Dashboard } from './Dashboard';
 import { LabRooms } from './LabRooms';
@@ -32,7 +42,9 @@ export function MainApp({ user, onLogout }: MainAppProps) {
               <Beaker className="w-8 h-8" />
               <div>
                 <h1 className="text-white">Badya University</h1>
-                <p className="text-white/90 dark:text-[#8BB4D9] text-sm">Laboratory Tracking System</p>
+                <p className="text-white/90 dark:text-[#8BB4D9] text-sm">
+                  Laboratory Tracking System
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -136,20 +148,21 @@ export function MainApp({ user, onLogout }: MainAppProps) {
         </nav>
       )}
 
-        {/* Main Content */}
-        <main className="container mx-auto px-6 py-8">
-          {activeTab === 'dashboard' && (
-            user.role === 'instructor' ? (
-              <InstructorDashboard user={user} />
-            ) : user.role === 'technician' ? (
-              <TechnicianMaintenance user={user} />
-            ) : user.role === 'doctor' ? (
-              <DoctorDashboard user={user} />
-            ) : (
-              <Dashboard user={user} onNavigate={(tab) => setActiveTab(tab as Tab)} />
-            )
-          )}
-        {activeTab === 'labs' && <LabRooms user={user} onNavigateToReservation={() => setActiveTab('reservation')} />}
+      {/* Main Content */}
+      <main className="container mx-auto px-6 py-8">
+        {activeTab === 'dashboard' &&
+          (user.role === 'instructor' ? (
+            <InstructorDashboard user={user} />
+          ) : user.role === 'technician' ? (
+            <TechnicianMaintenance user={user} />
+          ) : user.role === 'doctor' ? (
+            <DoctorDashboard user={user} />
+          ) : (
+            <Dashboard user={user} onNavigate={(tab) => setActiveTab(tab as Tab)} />
+          ))}
+        {activeTab === 'labs' && (
+          <LabRooms user={user} onNavigateToReservation={() => setActiveTab('reservation')} />
+        )}
         {activeTab === 'reservation' && <EquipmentReservation user={user} />}
         {activeTab === 'sharing' && <EquipmentSharing user={user} />}
         {activeTab === 'research' && user.role === 'doctor' && <ResearchLab user={user} />}

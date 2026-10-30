@@ -40,15 +40,15 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
         setLoading(true);
         setError(null);
         const backendLabs: BackendLab[] = await api.get('/labs');
-        
+
         // Map backend labs to frontend format
         const mappedLabs: Lab[] = await Promise.all(
           backendLabs.map(async (lab) => {
             // Determine status based on availability (simplified logic)
             let status: 'available' | 'occupied' | 'maintenance' = 'available';
             if (lab.equipmentList && lab.equipmentList.length > 0) {
-              const hasMaintenance = lab.equipmentList.some(eq => eq.status === 'MAINTENANCE');
-              const hasAvailable = lab.equipmentList.some(eq => eq.status === 'AVAILABLE');
+              const hasMaintenance = lab.equipmentList.some((eq) => eq.status === 'MAINTENANCE');
+              const hasAvailable = lab.equipmentList.some((eq) => eq.status === 'AVAILABLE');
               if (hasMaintenance) status = 'maintenance';
               else if (!hasAvailable) status = 'occupied';
             }
@@ -67,7 +67,7 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
               status,
               equipment: [], // Will be loaded when lab is selected
             };
-          })
+          }),
         );
 
         setLabs(mappedLabs);
@@ -90,7 +90,7 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
       try {
         setEquipmentLoading(selectedLab.id);
         const equipment: BackendEquipment[] = await api.get(`/equipment/lab/${selectedLab.id}`);
-        
+
         // Map equipment to frontend format
         // Note: Backend doesn't have quantity/available, so we'll use status
         const mappedEquipment: Equipment[] = equipment.map((eq, index) => {
@@ -124,9 +124,10 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
     fetchEquipment();
   }, [selectedLab?.id]);
 
-  const filteredLabs = labs.filter((lab) =>
-    lab.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lab.building.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredLabs = labs.filter(
+    (lab) =>
+      lab.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lab.building.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const getStatusColor = (status: Lab['status']) => {
@@ -141,11 +142,14 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
   };
 
   const handleMakeReservation = (equipment: Equipment) => {
-    localStorage.setItem('selectedEquipment', JSON.stringify({
-      ...equipment,
-      labName: selectedLab?.name,
-      labId: selectedLab?.id,
-    }));
+    localStorage.setItem(
+      'selectedEquipment',
+      JSON.stringify({
+        ...equipment,
+        labName: selectedLab?.name,
+        labId: selectedLab?.id,
+      }),
+    );
     setSelectedLab(null);
     onNavigateToReservation();
   };
@@ -155,7 +159,9 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
       {/* Header */}
       <div>
         <h1 className="text-[#1E3A5F] dark:text-[#2C5282]">Lab Rooms</h1>
-        <p className="text-[#2D3748] dark:text-[#B0B0B0] mt-1">Browse and access laboratory facilities</p>
+        <p className="text-[#2D3748] dark:text-[#B0B0B0] mt-1">
+          Browse and access laboratory facilities
+        </p>
       </div>
 
       {/* Error Message */}
@@ -204,7 +210,7 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
               >
                 <div className="p-6">
                   <h3 className="mb-3 text-[#1E3A5F] dark:text-[#2C5282]">{lab.name}</h3>
-                  
+
                   <div className="space-y-2 text-sm mb-4">
                     <div className="flex justify-between">
                       <span className="text-[#2D3748] dark:text-[#B0B0B0]">Building:</span>
@@ -216,7 +222,9 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#2D3748] dark:text-[#B0B0B0]">Capacity:</span>
-                      <span className="text-[#1A202C] dark:text-white">{lab.capacity} students</span>
+                      <span className="text-[#1A202C] dark:text-white">
+                        {lab.capacity} students
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#2D3748] dark:text-[#B0B0B0]">Equipment:</span>
@@ -226,7 +234,9 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
                     </div>
                   </div>
 
-                  <div className={`px-3 py-1 rounded-full text-xs border-2 text-center ${getStatusColor(lab.status)}`}>
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs border-2 text-center ${getStatusColor(lab.status)}`}
+                  >
                     {lab.status.charAt(0).toUpperCase() + lab.status.slice(1)}
                   </div>
 
@@ -249,7 +259,9 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-white mb-2">{selectedLab.name}</h2>
-                  <p className="text-[#E2E8F0] text-sm">{selectedLab.building} - Floor {selectedLab.floor}</p>
+                  <p className="text-[#E2E8F0] text-sm">
+                    {selectedLab.building} - Floor {selectedLab.floor}
+                  </p>
                 </div>
                 <button
                   onClick={() => setSelectedLab(null)}
@@ -262,11 +274,13 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
 
             <div className="p-6">
               <h3 className="mb-4 text-[#1E3A5F] dark:text-[#2C5282]">Available Equipment</h3>
-              
+
               {equipmentLoading === selectedLab.id ? (
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="w-6 h-6 text-[#1E3A5F] dark:text-[#2C5282] animate-spin" />
-                  <span className="ml-3 text-[#2D3748] dark:text-[#B0B0B0]">Loading equipment...</span>
+                  <span className="ml-3 text-[#2D3748] dark:text-[#B0B0B0]">
+                    Loading equipment...
+                  </span>
                 </div>
               ) : selectedLab.equipment.length === 0 ? (
                 <div className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">
@@ -282,7 +296,14 @@ export function LabRooms({ user, onNavigateToReservation }: LabRoomsProps) {
                       <div className="flex-1">
                         <p className="text-[#1A202C] dark:text-white">{equipment.name}</p>
                         <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0] mt-1">
-                          Available: <span className={equipment.available > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
+                          Available:{' '}
+                          <span
+                            className={
+                              equipment.available > 0
+                                ? 'text-green-600 dark:text-green-400'
+                                : 'text-red-600 dark:text-red-400'
+                            }
+                          >
                             {equipment.available} / {equipment.quantity}
                           </span>
                         </p>

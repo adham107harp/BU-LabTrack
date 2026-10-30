@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Search, Calendar, Clock, Loader2, X } from 'lucide-react';
 import { User } from '../App';
-import { api, Equipment as BackendEquipment, Reservation as BackendReservation, CreateReservationRequest } from '../services/api';
+import {
+  api,
+  Equipment as BackendEquipment,
+  Reservation as BackendReservation,
+  CreateReservationRequest,
+} from '../services/api';
 
 interface Equipment {
   id: number;
@@ -51,11 +56,11 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
         setLoading(true);
         setError(null);
         const backendEquipment: BackendEquipment[] = await api.get('/equipment');
-        
+
         // Map backend equipment to frontend format
         // Group by lab and count availability
         const equipmentMap = new Map<string, Equipment>();
-        
+
         backendEquipment.forEach((eq) => {
           const key = eq.equipmentName;
           if (!equipmentMap.has(key)) {
@@ -94,8 +99,10 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const backendReservations: BackendReservation[] = await api.get(`/reservations/student/${user.id}`);
-        
+        const backendReservations: BackendReservation[] = await api.get(
+          `/reservations/student/${user.id}`,
+        );
+
         // Map backend reservations to frontend format
         const mappedReservations: Reservation[] = backendReservations.map((res) => {
           const timeStr = res.time || '00:00';
@@ -112,7 +119,7 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
             date: res.date || '',
             startTime: timeStr,
             endTime: endTimeStr,
-            status: res.status?.toLowerCase() as 'pending' | 'approved' | 'rejected' || 'pending',
+            status: (res.status?.toLowerCase() as 'pending' | 'approved' | 'rejected') || 'pending',
           };
         });
 
@@ -133,7 +140,7 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
     if (selectedFromLab) {
       try {
         const equipmentData = JSON.parse(selectedFromLab);
-        const matchingEquipment = equipment.find(e => e.name === equipmentData.name);
+        const matchingEquipment = equipment.find((e) => e.name === equipmentData.name);
         if (matchingEquipment) {
           setSelectedEquipment(matchingEquipment);
           setShowReservationForm(true);
@@ -145,10 +152,11 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
     }
   }, [equipment]);
 
-  const filteredEquipment = equipment.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.lab.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEquipment = equipment.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.lab.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleReserve = (item: Equipment) => {
@@ -167,11 +175,13 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
     try {
       // Check availability first
       const isAvailable = await api.get(
-        `/reservations/check-availability?equipmentName=${encodeURIComponent(selectedEquipment.name)}&date=${reservationDate}&startTime=${startTime}&endTime=${endTime}`
+        `/reservations/check-availability?equipmentName=${encodeURIComponent(selectedEquipment.name)}&date=${reservationDate}&startTime=${startTime}&endTime=${endTime}`,
       );
 
       if (!isAvailable) {
-        setFormError('Equipment is not available at the requested time. Please choose a different time.');
+        setFormError(
+          'Equipment is not available at the requested time. Please choose a different time.',
+        );
         setSubmitting(false);
         return;
       }
@@ -192,13 +202,13 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
       // Validate school hours (8:00 AM - 6:00 PM)
       const schoolStart = 8 * 60; // 8:00 AM in minutes
       const schoolEnd = 18 * 60; // 6:00 PM in minutes
-      
+
       if (startTotal < schoolStart || startTotal > schoolEnd) {
         setFormError('Reservations can only be made during school hours (8:00 AM - 6:00 PM).');
         setSubmitting(false);
         return;
       }
-      
+
       if (endTotal < schoolStart || endTotal > schoolEnd) {
         setFormError('Reservation end time must be within school hours (8:00 AM - 6:00 PM).');
         setSubmitting(false);
@@ -229,7 +239,9 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
       setSelectedEquipment(null);
 
       // Refresh reservations
-      const backendReservations: BackendReservation[] = await api.get(`/reservations/student/${user.id}`);
+      const backendReservations: BackendReservation[] = await api.get(
+        `/reservations/student/${user.id}`,
+      );
       const mappedReservations: Reservation[] = backendReservations.map((res) => {
         const timeStr = res.time || '00:00';
         const duration = res.duration || 60;
@@ -245,7 +257,7 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
           date: res.date || '',
           startTime: timeStr,
           endTime: endTimeStr,
-          status: res.status?.toLowerCase() as 'pending' | 'approved' | 'rejected' || 'pending',
+          status: (res.status?.toLowerCase() as 'pending' | 'approved' | 'rejected') || 'pending',
         };
       });
       setMyReservations(mappedReservations);
@@ -275,7 +287,9 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
       {/* Header */}
       <div>
         <h1 className="text-[#1E3A5F] dark:text-[#9BB0C1]">Equipment Reservation</h1>
-        <p className="text-[#2D3748] dark:text-[#B0B0B0] mt-1">Reserve laboratory equipment for your experiments and projects</p>
+        <p className="text-[#2D3748] dark:text-[#B0B0B0] mt-1">
+          Reserve laboratory equipment for your experiments and projects
+        </p>
       </div>
 
       {/* Error Message */}
@@ -292,14 +306,19 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
         </div>
         <div className="p-6">
           {myReservations.length === 0 ? (
-            <p className="text-[#2D3748] dark:text-[#B0B0B0] text-center py-8">No reservations yet</p>
+            <p className="text-[#2D3748] dark:text-[#B0B0B0] text-center py-8">
+              No reservations yet
+            </p>
           ) : (
             <div className="space-y-3">
               {myReservations.map((reservation) => (
-                 <div key={reservation.id} className="flex items-center justify-between p-4 bg-[#FFFFFF] dark:bg-[#2F3541] rounded-lg border-2 border-[#E2E8F0] dark:border-[#3A4150]">
-                    <div>
-                     <p className="text-[#1A202C] dark:text-white">{reservation.equipmentName}</p>
-                     <div className="flex items-center gap-4 mt-1 text-sm text-[#2D3748] dark:text-[#B0B0B0]">
+                <div
+                  key={reservation.id}
+                  className="flex items-center justify-between p-4 bg-[#FFFFFF] dark:bg-[#2F3541] rounded-lg border-2 border-[#E2E8F0] dark:border-[#3A4150]"
+                >
+                  <div>
+                    <p className="text-[#1A202C] dark:text-white">{reservation.equipmentName}</p>
+                    <div className="flex items-center gap-4 mt-1 text-sm text-[#2D3748] dark:text-[#B0B0B0]">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {reservation.date}
@@ -310,7 +329,9 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
                       </span>
                     </div>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(reservation.status)}`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs ${getStatusColor(reservation.status)}`}
+                  >
                     {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
                   </span>
                 </div>
@@ -322,14 +343,14 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
 
       {/* Search */}
       <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow p-4 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
-          <div className="relative">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#2D3748] dark:text-[#B0B0B0] w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search equipment by name, category, or lab..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-             className="w-full pl-10 pr-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+          <input
+            type="text"
+            placeholder="Search equipment by name, category, or lab..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
           />
         </div>
       </div>
@@ -346,28 +367,34 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredEquipment.length === 0 ? (
-             <div className="col-span-full text-center py-12 text-[#2D3748] dark:text-[#B0B0B0]">
+            <div className="col-span-full text-center py-12 text-[#2D3748] dark:text-[#B0B0B0]">
               {searchTerm ? 'No equipment found matching your search.' : 'No equipment available.'}
             </div>
           ) : (
             filteredEquipment.map((item, index) => (
-              <div 
-                key={item.id} 
-                 className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow hover:shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-[#E2E8F0] dark:border-[#3A4150] animate-scaleIn"
+              <div
+                key={item.id}
+                className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow hover:shadow-lg transition-all duration-300 transform hover:scale-105 border-2 border-[#E2E8F0] dark:border-[#3A4150] animate-scaleIn"
                 style={{ animationDelay: `${index * 0.02}s` }}
               >
                 <div className="p-6">
-                   <h3 className="mb-1 text-[#1E3A5F] dark:text-[#9BB0C1]">{item.name}</h3>
-                   <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm mb-4">{item.category}</p>
-                  
+                  <h3 className="mb-1 text-[#1E3A5F] dark:text-[#9BB0C1]">{item.name}</h3>
+                  <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm mb-4">{item.category}</p>
+
                   <div className="space-y-2 text-sm mb-4">
                     <div className="flex justify-between">
-                       <span className="text-[#2D3748] dark:text-[#B0B0B0]">Lab:</span>
-                       <span className="text-[#1A202C] dark:text-white">{item.lab}</span>
-                      </div>
-                      <div className="flex justify-between">
-                       <span className="text-[#2D3748] dark:text-[#B0B0B0]">Available:</span>
-                      <span className={item.available === 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}>
+                      <span className="text-[#2D3748] dark:text-[#B0B0B0]">Lab:</span>
+                      <span className="text-[#1A202C] dark:text-white">{item.lab}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#2D3748] dark:text-[#B0B0B0]">Available:</span>
+                      <span
+                        className={
+                          item.available === 0
+                            ? 'text-red-600 dark:text-red-400'
+                            : 'text-green-600 dark:text-green-400'
+                        }
+                      >
                         {item.available} / {item.total}
                       </span>
                     </div>
@@ -379,7 +406,7 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
                     className={`w-full px-4 py-2 rounded-lg transition-all ${
                       item.available === 0
                         ? 'bg-gray-200 dark:bg-[#2F3541] text-gray-500 dark:text-[#6B6B6B] cursor-not-allowed'
-                          : 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white hover:shadow-lg transform hover:scale-105'
+                        : 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white hover:shadow-lg transform hover:scale-105'
                     }`}
                   >
                     {item.available === 0 ? 'Not Available' : 'Reserve'}
@@ -394,9 +421,11 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
       {/* Reservation Form Modal */}
       {showReservationForm && selectedEquipment && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-           <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-xl max-w-md w-full p-6 border-2 border-[#E53E3E] animate-scaleIn">
-              <div className="flex justify-between items-center mb-4">
-               <h2 className="text-[#1E3A5F] dark:text-[#9BB0C1]">Reserve {selectedEquipment.name}</h2>
+          <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-xl max-w-md w-full p-6 border-2 border-[#E53E3E] animate-scaleIn">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-[#1E3A5F] dark:text-[#9BB0C1]">
+                Reserve {selectedEquipment.name}
+              </h2>
               <button
                 onClick={() => {
                   setShowReservationForm(false);
@@ -413,72 +442,80 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
                 {formError}
               </div>
             )}
-            
+
             <form onSubmit={handleSubmitReservation} className="space-y-4">
               <div>
-                 <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Date</label>
-                  <input
-                    type="date"
-                    value={reservationDate}
-                    onChange={(e) => setReservationDate(e.target.value)}
-                    required
-                    min={new Date().toISOString().split('T')[0]}
-                   className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+                <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Date</label>
+                <input
+                  type="date"
+                  value={reservationDate}
+                  onChange={(e) => setReservationDate(e.target.value)}
+                  required
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                   <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Start Time (8:00 AM - 6:00 PM)</label>
-                    <input
-                      type="time"
-                      value={startTime}
-                      onChange={(e) => setStartTime(e.target.value)}
-                      min="08:00"
-                      max="18:00"
-                      required
-                     className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
-                    />
-                   <p className="text-xs text-[#2D3748] dark:text-[#6B6B6B] mt-1">School hours: 8:00 AM - 6:00 PM</p>
-                  </div>
-                  <div>
-                   <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">End Time (8:00 AM - 6:00 PM)</label>
-                    <input
-                      type="time"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      min="08:00"
-                      max="18:00"
-                      required
-                     className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
-                    />
-                   <p className="text-xs text-[#2D3748] dark:text-[#6B6B6B] mt-1">Must be after start time</p>
+                  <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">
+                    Start Time (8:00 AM - 6:00 PM)
+                  </label>
+                  <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    min="08:00"
+                    max="18:00"
+                    required
+                    className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+                  />
+                  <p className="text-xs text-[#2D3748] dark:text-[#6B6B6B] mt-1">
+                    School hours: 8:00 AM - 6:00 PM
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">
+                    End Time (8:00 AM - 6:00 PM)
+                  </label>
+                  <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    min="08:00"
+                    max="18:00"
+                    required
+                    className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+                  />
+                  <p className="text-xs text-[#2D3748] dark:text-[#6B6B6B] mt-1">
+                    Must be after start time
+                  </p>
                 </div>
               </div>
 
               <div>
-                 <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Purpose</label>
-                  <textarea
-                    value={purpose}
-                    onChange={(e) => setPurpose(e.target.value)}
-                    placeholder="Describe the purpose of this reservation..."
-                    rows={3}
-                   className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
-                  />
-                </div>
+                <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Purpose</label>
+                <textarea
+                  value={purpose}
+                  onChange={(e) => setPurpose(e.target.value)}
+                  placeholder="Describe the purpose of this reservation..."
+                  rows={3}
+                  className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+                />
+              </div>
 
-                <div>
-                 <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Team Size</label>
-                  <input
-                    type="number"
-                    value={teamSize}
-                    onChange={(e) => setTeamSize(parseInt(e.target.value) || 1)}
-                    min={1}
-                    max={10}
-                    required
-                   className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
-                  />
-                </div>
+              <div>
+                <label className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">Team Size</label>
+                <input
+                  type="number"
+                  value={teamSize}
+                  onChange={(e) => setTeamSize(parseInt(e.target.value) || 1)}
+                  min={1}
+                  max={10}
+                  required
+                  className="w-full px-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-[#FFFFFF] dark:bg-[#2F3541] text-[#1A202C] dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#9BB0C1]"
+                />
+              </div>
 
               <div className="flex gap-3 pt-4">
                 <button
@@ -488,14 +525,14 @@ export function EquipmentReservation({ user }: EquipmentReservationProps) {
                     setFormError(null);
                   }}
                   disabled={submitting}
-                   className="flex-1 px-4 py-2 bg-[#EDF2F7] dark:bg-[#2F3541] text-[#1A202C] dark:text-[#B0B0B0] rounded-lg hover:bg-[#E2E8F0] dark:hover:bg-[#3A4150] transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-[#EDF2F7] dark:bg-[#2F3541] text-[#1A202C] dark:text-[#B0B0B0] rounded-lg hover:bg-[#E2E8F0] dark:hover:bg-[#3A4150] transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                   className="flex-1 px-4 py-2 bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting ? (
                     <>
