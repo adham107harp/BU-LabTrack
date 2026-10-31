@@ -70,226 +70,150 @@ export const removeAuthToken = () => {
   localStorage.removeItem('authToken');
 };
 
+/** Error thrown for non-2xx responses; carries the HTTP status. */
+export class ApiError extends Error {
+  readonly status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
+interface RequestOptions {
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  body?: unknown;
+  /** Attach the stored bearer token (default true). Auth endpoints pass false. */
+  auth?: boolean;
+  /** Message used when the server gives no usable error body. */
+  fallbackMessage: string;
+}
+
+/**
+ * Single place that talks to the REST API: adds JSON/auth headers, turns
+ * network failures and non-JSON error bodies into readable errors, and clears
+ * the stored token on 401 for authenticated calls. Does not consult DEMO_MODE.
+ */
+export async function request<T>(endpoint: string, options: RequestOptions): Promise<T> {
+  const { method = 'GET', body, auth = true, fallbackMessage } = options;
+  const token = auth ? getAuthToken() : null;
+  const serialized = body !== undefined ? JSON.stringify(body) : undefined;
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      ...(serialized !== undefined && { body: serialized }),
+    });
+  } catch {
+    throw new ApiError('Cannot reach the server. Check your connection and try again.', 0);
+  }
+
+  if (!response.ok) {
+    if (auth && response.status === 401) {
+      removeAuthToken();
+      throw new ApiError('Unauthorized. Please login again.', 401);
+    }
+    const error: Partial<ErrorResponse> | null = await response.json().catch(() => null);
+    throw new ApiError(error?.message || fallbackMessage, response.status);
+  }
+
+  // DELETE (and other empty-body responses) may return 204 or an empty body.
+  if (response.status === 204) return undefined as T;
+  const text = await response.text();
+  if (!text) return undefined as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new ApiError('Unexpected response from the server.', response.status);
+  }
+}
+
+async function authenticate(
+  endpoint: string,
+  data: unknown,
+  fallbackMessage: string,
+): Promise<AuthResponse> {
+  const result = await request<AuthResponse>(endpoint, {
+    method: 'POST',
+    body: data,
+    auth: false,
+    fallbackMessage,
+  });
+  if (!result?.token) throw new ApiError('Unexpected response from the server.', 200);
+  setAuthToken(result.token);
+  return result;
+}
+
+async function demoAuth(call: Promise<AuthResponse>): Promise<AuthResponse> {
+  const r = await call;
+  setAuthToken(r.token);
+  return r;
+}
+
 // API functions
 export const api = {
-  async register(data: RegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) {
-      const r = await demoBackend.register('student', data);
-      setAuthToken(r.token);
-      return r;
-    }
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.message || 'Registration failed');
-    }
-
-    const result: AuthResponse = await response.json();
-    setAuthToken(result.token);
-    return result;
+  register(data: RegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) return demoAuth(demoBackend.register('student', data));
+    return authenticate('/auth/register', data, 'Registration failed');
   },
 
-  async registerInstructor(data: InstructorRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) {
-      const r = await demoBackend.register('instructor', data);
-      setAuthToken(r.token);
-      return r;
-    }
-    const response = await fetch(`${API_BASE_URL}/auth/register/instructor`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.message || 'Registration failed');
-    }
-
-    const result: AuthResponse = await response.json();
-    setAuthToken(result.token);
-    return result;
+  registerInstructor(data: InstructorRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) return demoAuth(demoBackend.register('instructor', data));
+    return authenticate('/auth/register/instructor', data, 'Registration failed');
   },
 
-  async registerTechnician(data: TechnicianRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) {
-      const r = await demoBackend.register('technician', data);
-      setAuthToken(r.token);
-      return r;
-    }
-    const response = await fetch(`${API_BASE_URL}/auth/register/technician`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.message || 'Registration failed');
-    }
-
-    const result: AuthResponse = await response.json();
-    setAuthToken(result.token);
-    return result;
+  registerTechnician(data: TechnicianRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) return demoAuth(demoBackend.register('technician', data));
+    return authenticate('/auth/register/technician', data, 'Registration failed');
   },
 
-  async registerDoctor(data: DoctorRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) {
-      const r = await demoBackend.register('doctor', data);
-      setAuthToken(r.token);
-      return r;
-    }
-    const response = await fetch(`${API_BASE_URL}/auth/register/doctor`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.message || 'Registration failed');
-    }
-
-    const result: AuthResponse = await response.json();
-    setAuthToken(result.token);
-    return result;
+  registerDoctor(data: DoctorRegisterRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) return demoAuth(demoBackend.register('doctor', data));
+    return authenticate('/auth/register/doctor', data, 'Registration failed');
   },
 
-  async login(data: LoginRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) {
-      const r = await demoBackend.login(data.email);
-      setAuthToken(r.token);
-      return r;
-    }
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.message || 'Login failed');
-    }
-
-    const result: AuthResponse = await response.json();
-    setAuthToken(result.token);
-    return result;
+  login(data: LoginRequest): Promise<AuthResponse> {
+    if (DEMO_MODE) return demoAuth(demoBackend.login(data.email));
+    return authenticate('/auth/login', data, 'Login failed');
   },
 
-  async get(endpoint: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers narrow per endpoint
+  get(endpoint: string): Promise<any> {
     if (DEMO_MODE) return demoBackend.get(endpoint);
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        removeAuthToken();
-        throw new Error('Unauthorized. Please login again.');
-      }
-      const error: ErrorResponse = await response
-        .json()
-        .catch(() => ({ message: `Failed to fetch ${endpoint}` }));
-      throw new Error(error.message || `Failed to fetch ${endpoint}`);
-    }
-
-    return response.json();
+    return request(endpoint, { fallbackMessage: `Failed to fetch ${endpoint}` });
   },
 
-  async post(endpoint: string, data: any): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers narrow per endpoint
+  post(endpoint: string, data: unknown): Promise<any> {
     if (DEMO_MODE) return demoBackend.post(endpoint, data);
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    return request(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-      body: JSON.stringify(data),
+      body: data,
+      fallbackMessage: `Failed to post to ${endpoint}`,
     });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        removeAuthToken();
-        throw new Error('Unauthorized. Please login again.');
-      }
-      const error: ErrorResponse = await response
-        .json()
-        .catch(() => ({ message: `Failed to post to ${endpoint}` }));
-      throw new Error(error.message || `Failed to post to ${endpoint}`);
-    }
-
-    return response.json();
   },
 
-  async put(endpoint: string, data: any): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers narrow per endpoint
+  put(endpoint: string, data: unknown): Promise<any> {
     if (DEMO_MODE) return demoBackend.put(endpoint, data);
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    return request(endpoint, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-      body: JSON.stringify(data),
+      body: data,
+      fallbackMessage: `Failed to put to ${endpoint}`,
     });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        removeAuthToken();
-        throw new Error('Unauthorized. Please login again.');
-      }
-      const error: ErrorResponse = await response
-        .json()
-        .catch(() => ({ message: `Failed to put to ${endpoint}` }));
-      throw new Error(error.message || `Failed to put to ${endpoint}`);
-    }
-
-    return response.json();
   },
 
   async delete(endpoint: string): Promise<void> {
     if (DEMO_MODE) return demoBackend.delete(endpoint);
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    await request<void>(endpoint, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      fallbackMessage: `Failed to delete ${endpoint}`,
     });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        removeAuthToken();
-        throw new Error('Unauthorized. Please login again.');
-      }
-      const error: ErrorResponse = await response
-        .json()
-        .catch(() => ({ message: `Failed to delete ${endpoint}` }));
-      throw new Error(error.message || `Failed to delete ${endpoint}`);
-    }
   },
 };
 
