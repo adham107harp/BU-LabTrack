@@ -21,22 +21,22 @@ Click **Sign In**, then pick one of the demo accounts (student, instructor, tech
 
 The app has four kinds of users, each with their own registration and dashboard:
 
-| Role | What they can do |
-|---|---|
-| **Student** | View labs and equipment, reserve equipment, list and borrow shared tools, browse research labs |
-| **Instructor** | Review reservations (approve / reject), add equipment, update equipment status |
-| **Technician** | See and handle maintenance requests assigned to them |
-| **Doctor** | View the research labs overview dashboard |
+| Role           | What they can do                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| **Student**    | View labs and equipment, reserve equipment, list and borrow shared tools, browse research labs |
+| **Instructor** | Review reservations (approve / reject), add equipment, update equipment status                 |
+| **Technician** | See and handle maintenance requests assigned to them                                           |
+| **Doctor**     | View the research labs overview dashboard                                                      |
 
 ## Screenshots
 
-| Login (demo mode) | Lab rooms |
-|---|---|
-| ![Login](docs/screenshots/login.webp) | ![Lab rooms](docs/screenshots/lab-rooms.webp) |
-| **Equipment reservations** | **Instructor dashboard** |
-| ![Equipment reservations](docs/screenshots/equipment-reservation.webp) | ![Instructor dashboard](docs/screenshots/instructor-dashboard.webp) |
-| **Technician maintenance** | |
-| ![Technician maintenance](docs/screenshots/technician-maintenance.webp) | |
+| Login (demo mode)                                                       | Lab rooms                                                           |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ![Login](docs/screenshots/login.webp)                                   | ![Lab rooms](docs/screenshots/lab-rooms.webp)                       |
+| **Equipment reservations**                                              | **Instructor dashboard**                                            |
+| ![Equipment reservations](docs/screenshots/equipment-reservation.webp)  | ![Instructor dashboard](docs/screenshots/instructor-dashboard.webp) |
+| **Technician maintenance**                                              |                                                                     |
+| ![Technician maintenance](docs/screenshots/technician-maintenance.webp) |                                                                     |
 
 ## Features
 
@@ -65,11 +65,11 @@ npm run dev            # http://localhost:3000
 npm run build          # production build in /build
 ```
 
-| Script | What it does |
-|---|---|
-| `npm run dev` | Dev server, talks to the API |
-| `npm run dev:demo` | Dev server on sample data, no API needed |
-| `npm run build` | Production build in `/build` |
+| Script               | What it does                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `npm run dev`        | Dev server, talks to the API                                                         |
+| `npm run dev:demo`   | Dev server on sample data, no API needed                                             |
+| `npm run build`      | Production build in `/build`                                                         |
 | `npm run build:demo` | Static demo build (relative paths, can be hosted on GitHub Pages or any static host) |
 
 ## Backend

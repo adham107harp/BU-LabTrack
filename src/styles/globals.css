@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* The app toggles dark mode with a .dark class on a wrapper element
    (see App.tsx), not with the OS colour-scheme setting. */
@@ -6,43 +6,56 @@
 
 :root {
   /* Light Mode Colors - Very Light Backgrounds with Dark Text */
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F8F9FA;
-  --color-bg-accent: #F5F7FA;
-  --color-primary: #1E3A5F;
-  --color-secondary: #2C5282;
-  --color-accent: #E53E3E;
-  --color-light: #EDF2F7;
-  --color-text: #1A202C;
-  --color-text-secondary: #2D3748;
-  --color-border: #E2E8F0;
-  --color-success: #22543D;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-accent: #f5f7fa;
+  --color-primary: #1e3a5f;
+  --color-secondary: #2c5282;
+  --color-accent: #e53e3e;
+  --color-light: #edf2f7;
+  --color-text: #1a202c;
+  --color-text-secondary: #2d3748;
+  --color-border: #e2e8f0;
+  --color-success: #22543d;
   --color-warning: #744210;
-  --color-error: #742A2A;
+  --color-error: #742a2a;
 }
 
 .dark {
   /* Dark Mode Colors */
-  --color-bg-primary: #1A1D23;
+  --color-bg-primary: #1a1d23;
   --color-bg-secondary: #252932;
-  --color-bg-accent: #2F3541;
-  --color-primary: #9BB0C1;
-  --color-secondary: #51829B;
-  --color-accent: #F6995C;
-  --color-light: #3A4150;
-  --color-text: #E8E8E8;
-  --color-text-secondary: #B0B0B0;
-  --color-border: #3A4150;
+  --color-bg-accent: #2f3541;
+  --color-primary: #9bb0c1;
+  --color-secondary: #51829b;
+  --color-accent: #f6995c;
+  --color-light: #3a4150;
+  --color-text: #e8e8e8;
+  --color-text-secondary: #b0b0b0;
+  --color-border: #3a4150;
 }
 
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -51,8 +64,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 h1 {
@@ -123,7 +135,8 @@ p {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
