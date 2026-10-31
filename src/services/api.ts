@@ -97,6 +97,7 @@ interface RequestOptions {
 export async function request<T>(endpoint: string, options: RequestOptions): Promise<T> {
   const { method = 'GET', body, auth = true, fallbackMessage } = options;
   const token = auth ? getAuthToken() : null;
+  const serialized = body !== undefined ? JSON.stringify(body) : undefined;
 
   let response: Response;
   try {
@@ -106,7 +107,7 @@ export async function request<T>(endpoint: string, options: RequestOptions): Pro
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      ...(body !== undefined && { body: JSON.stringify(body) }),
+      ...(serialized !== undefined && { body: serialized }),
     });
   } catch {
     throw new ApiError('Cannot reach the server. Check your connection and try again.', 0);
@@ -124,7 +125,12 @@ export async function request<T>(endpoint: string, options: RequestOptions): Pro
   // DELETE (and other empty-body responses) may return 204 or an empty body.
   if (response.status === 204) return undefined as T;
   const text = await response.text();
-  return (text ? JSON.parse(text) : undefined) as T;
+  if (!text) return undefined as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new ApiError('Unexpected response from the server.', response.status);
+  }
 }
 
 async function authenticate(
@@ -138,6 +144,7 @@ async function authenticate(
     auth: false,
     fallbackMessage,
   });
+  if (!result?.token) throw new ApiError('Unexpected response from the server.', 200);
   setAuthToken(result.token);
   return result;
 }

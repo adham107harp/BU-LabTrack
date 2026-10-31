@@ -78,4 +78,32 @@ describe('request()', () => {
       request('/x', { method: 'DELETE', fallbackMessage: 'f' }),
     ).resolves.toBeUndefined();
   });
+
+  it('reports a 2xx non-JSON body as an ApiError', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response('<html></html>', { status: 200 })),
+    );
+    await expect(request('/x', { fallbackMessage: 'f' })).rejects.toBeInstanceOf(ApiError);
+  });
+
+  it('returns undefined for an empty 200 body and surfaces authenticated 4xx messages', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce(new Response('', { status: 200 })));
+    await expect(request('/x', { fallbackMessage: 'f' })).resolves.toBeUndefined();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(json({ message: 'Lab full' }, 409)));
+    await expect(request('/x', { method: 'POST', body: {}, fallbackMessage: 'f' })).rejects.toThrow(
+      'Lab full',
+    );
+  });
+
+  it('does not report unserialisable bodies as network errors', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const circular: Record<string, unknown> = {};
+    circular.self = circular;
+    await expect(
+      request('/x', { method: 'POST', body: circular, fallbackMessage: 'f' }),
+    ).rejects.toThrow(/circular/i);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
