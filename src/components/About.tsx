@@ -5,12 +5,14 @@ export function About() {
     {
       icon: Package,
       title: 'Equipment Reservation',
-      description: 'Students can reserve laboratory equipment for their experiments and projects in advance.',
+      description:
+        'Students can reserve laboratory equipment for their experiments and projects in advance.',
     },
     {
       icon: Share2,
       title: 'Equipment Sharing',
-      description: 'Share equipment and resources with fellow students, fostering collaboration and efficient resource use.',
+      description:
+        'Share equipment and resources with fellow students, fostering collaboration and efficient resource use.',
     },
     {
       icon: Beaker,
@@ -20,17 +22,20 @@ export function About() {
     {
       icon: FlaskConical,
       title: 'Research Lab Access',
-      description: 'Doctors and faculty members have exclusive access to research lab management and advanced equipment.',
+      description:
+        'Doctors and faculty members have exclusive access to research lab management and advanced equipment.',
     },
     {
       icon: Calendar,
       title: 'Session Tracking',
-      description: 'Track all lab sessions, including scheduled, ongoing, and completed activities.',
+      description:
+        'Track all lab sessions, including scheduled, ongoing, and completed activities.',
     },
     {
       icon: Users,
       title: 'User Roles',
-      description: 'Role-based access for students, instructors, technicians, and doctors, ensuring appropriate permissions and features.',
+      description:
+        'Role-based access for students, instructors, technicians, and doctors, ensuring appropriate permissions and features.',
     },
   ];
 
@@ -43,8 +48,9 @@ export function About() {
           <h1 className="text-white">About Our System</h1>
         </div>
         <p className="text-white/90 dark:text-[#2C5282] text-lg max-w-3xl">
-          The Badya University Laboratory Tracking System is a comprehensive platform designed to streamline 
-          laboratory management, equipment reservations, and resource sharing across all departments.
+          The Badya University Laboratory Tracking System is a comprehensive platform designed to
+          streamline laboratory management, equipment reservations, and resource sharing across all
+          departments.
         </p>
       </div>
 
@@ -52,9 +58,10 @@ export function About() {
       <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg p-8 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
         <h2 className="mb-4 text-[#1E3A5F] dark:text-[#2C5282]">Our Mission</h2>
         <p className="text-[#1A202C] dark:text-[#B0B0B0] leading-relaxed">
-          We aim to provide an efficient, user-friendly system that enhances the laboratory experience for both 
-          students and faculty members. By digitizing lab management and equipment tracking, we reduce conflicts, 
-          improve resource utilization, and support academic excellence at Badya University.
+          We aim to provide an efficient, user-friendly system that enhances the laboratory
+          experience for both students and faculty members. By digitizing lab management and
+          equipment tracking, we reduce conflicts, improve resource utilization, and support
+          academic excellence at Badya University.
         </p>
       </div>
 
@@ -63,14 +70,19 @@ export function About() {
         <h2 className="mb-6 text-[#1E3A5F] dark:text-[#2C5282]">Key Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div key={index} className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg p-6 hover:shadow-xl transition-all border-2 border-[#E2E8F0] dark:border-[#3A4150]">
+            <div
+              key={index}
+              className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg p-6 hover:shadow-xl transition-all border-2 border-[#E2E8F0] dark:border-[#3A4150]"
+            >
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-gradient-to-br from-[#1E3A5F] to-[#2C5282] text-white rounded-lg">
                   <feature.icon className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="mb-2 text-[#1E3A5F] dark:text-[#2C5282]">{feature.title}</h3>
-                  <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm">{feature.description}</p>
+                  <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm">
+                    {feature.description}
+                  </p>
                 </div>
               </div>
             </div>
@@ -89,7 +101,8 @@ export function About() {
             <div>
               <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">Login to Your Account</h3>
               <p className="text-[#2D3748] dark:text-[#B0B0B0]">
-                Sign in using your university credentials as either a student, instructor, technician, or doctor to access role-specific features.
+                Sign in using your university credentials as either a student, instructor,
+                technician, or doctor to access role-specific features.
               </p>
             </div>
           </div>
@@ -98,9 +111,12 @@ export function About() {
               2
             </div>
             <div>
-              <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">Browse Available Resources</h3>
+              <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">
+                Browse Available Resources
+              </h3>
               <p className="text-[#2D3748] dark:text-[#B0B0B0]">
-                Explore lab rooms, equipment inventory, and check availability in real-time through the dashboard.
+                Explore lab rooms, equipment inventory, and check availability in real-time through
+                the dashboard.
               </p>
             </div>
           </div>
@@ -111,7 +127,8 @@ export function About() {
             <div>
               <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">Reserve Equipment</h3>
               <p className="text-[#2D3748] dark:text-[#B0B0B0]">
-                Select the equipment you need, choose your preferred date and time (respecting lab schedules), and submit your reservation request.
+                Select the equipment you need, choose your preferred date and time (respecting lab
+                schedules), and submit your reservation request.
               </p>
             </div>
           </div>
@@ -122,7 +139,8 @@ export function About() {
             <div>
               <h3 className="mb-1 text-[#1E3A5F] dark:text-[#2C5282]">Share with Peers</h3>
               <p className="text-[#2D3748] dark:text-[#B0B0B0]">
-                Post equipment you're willing to share or browse items offered by other students for collaborative work.
+                Post equipment you're willing to share or browse items offered by other students for
+                collaborative work.
               </p>
             </div>
           </div>
@@ -135,27 +153,39 @@ export function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Reduce conflicts over equipment availability</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Reduce conflicts over equipment availability
+            </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Improve laboratory resource utilization</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Improve laboratory resource utilization
+            </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Foster collaboration among students</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Foster collaboration among students
+            </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Streamline lab management for faculty</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Streamline lab management for faculty
+            </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Track equipment maintenance schedules</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Track equipment maintenance schedules
+            </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[#1A202C] dark:text-[#B0B0B0]">Generate usage reports and analytics</p>
+            <p className="text-[#1A202C] dark:text-[#B0B0B0]">
+              Generate usage reports and analytics
+            </p>
           </div>
         </div>
       </div>

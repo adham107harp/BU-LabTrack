@@ -1,4 +1,13 @@
-import { Beaker, CheckCircle, Package, Share2, FlaskConical, ArrowRight, Moon, Sun } from 'lucide-react';
+import {
+  Beaker,
+  CheckCircle,
+  Package,
+  Share2,
+  FlaskConical,
+  ArrowRight,
+  Moon,
+  Sun,
+} from 'lucide-react';
 import { useDarkMode } from '../App';
 
 interface AboutLandingProps {
@@ -12,12 +21,14 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
     {
       icon: Package,
       title: 'Equipment Reservation',
-      description: 'Students can reserve laboratory equipment for their experiments and projects in advance.',
+      description:
+        'Students can reserve laboratory equipment for their experiments and projects in advance.',
     },
     {
       icon: Share2,
       title: 'Equipment Sharing',
-      description: 'Share equipment and resources with fellow students, fostering collaboration and efficient resource use.',
+      description:
+        'Share equipment and resources with fellow students, fostering collaboration and efficient resource use.',
     },
     {
       icon: Beaker,
@@ -27,7 +38,8 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
     {
       icon: FlaskConical,
       title: 'Research Lab Access',
-      description: 'Doctors and faculty members have exclusive access to research lab management and advanced equipment.',
+      description:
+        'Doctors and faculty members have exclusive access to research lab management and advanced equipment.',
     },
   ];
 
@@ -41,7 +53,9 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
               <Beaker className="w-8 h-8" />
               <div>
                 <h1 className="text-white">Badya University</h1>
-                <p className="text-[#E2E8F0] dark:text-[#2C5282] text-sm">Laboratory Tracking System</p>
+                <p className="text-[#E2E8F0] dark:text-[#2C5282] text-sm">
+                  Laboratory Tracking System
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -73,16 +87,16 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
             <h1 className="mb-8 text-[#1E3A5F] dark:text-[#2C5282]">
               Welcome to Badya University Laboratory Tracking System
             </h1>
-            
+
             {/* Laboratory Image */}
             <div className="mb-8 rounded-lg overflow-hidden shadow-2xl max-w-3xl mx-auto animate-scaleIn border-4 border-[#E53E3E]">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1606206848010-83949917a080?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWJvcmF0b3J5JTIwZXF1aXBtZW50JTIwc2NpZW5jZXxlbnwxfHx8fDE3NjU3NjUxODl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
                 alt="Laboratory Equipment and Science Research"
                 className="w-full h-auto object-cover"
               />
             </div>
-            
+
             <button
               onClick={onGetStarted}
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white rounded-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -118,7 +132,9 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
         {/* Benefits Section */}
         <section className="py-16">
           <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg p-8 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
-            <h2 className="text-center mb-8 text-[#1E3A5F] dark:text-[#2C5282]">Why Choose Our System?</h2>
+            <h2 className="text-center mb-8 text-[#1E3A5F] dark:text-[#2C5282]">
+              Why Choose Our System?
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-[#E53E3E] flex-shrink-0 mt-1" />
@@ -168,9 +184,21 @@ export function AboutLanding({ onGetStarted }: AboutLandingProps) {
             <div>
               <h3 className="text-white mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm text-[#E2E8F0] dark:text-[#2C5282]">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Support</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQs</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contact Support
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    FAQs
+                  </a>
+                </li>
               </ul>
             </div>
             <div>

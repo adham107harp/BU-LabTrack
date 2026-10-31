@@ -60,16 +60,18 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
     );
   }
 
-  const pendingRequests = maintenanceRequests.filter(req => req.status === 'PENDING');
-  const inProgressRequests = maintenanceRequests.filter(req => req.status === 'IN_PROGRESS');
-  const completedRequests = maintenanceRequests.filter(req => req.status === 'COMPLETED');
+  const pendingRequests = maintenanceRequests.filter((req) => req.status === 'PENDING');
+  const inProgressRequests = maintenanceRequests.filter((req) => req.status === 'IN_PROGRESS');
+  const completedRequests = maintenanceRequests.filter((req) => req.status === 'COMPLETED');
 
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#1E3A5F] to-[#2C5282] dark:from-[#2F3541] dark:to-[#252932] text-white rounded-lg shadow-lg p-6">
         <h1 className="text-white mb-2">Welcome, {user.name}!</h1>
-        <p className="text-white/90 dark:text-[#2C5282]">Manage maintenance requests and equipment upkeep</p>
+        <p className="text-white/90 dark:text-[#2C5282]">
+          Manage maintenance requests and equipment upkeep
+        </p>
       </div>
 
       {error && (
@@ -84,7 +86,9 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">Pending</p>
-              <p className="text-3xl font-bold text-[#E53E3E] dark:text-[#E53E3E] mt-2">{pendingRequests.length}</p>
+              <p className="text-3xl font-bold text-[#E53E3E] dark:text-[#E53E3E] mt-2">
+                {pendingRequests.length}
+              </p>
             </div>
             <AlertCircle className="w-12 h-12 text-[#E53E3E] opacity-20" />
           </div>
@@ -94,7 +98,9 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">In Progress</p>
-              <p className="text-3xl font-bold text-[#1E3A5F] dark:text-[#2C5282] mt-2">{inProgressRequests.length}</p>
+              <p className="text-3xl font-bold text-[#1E3A5F] dark:text-[#2C5282] mt-2">
+                {inProgressRequests.length}
+              </p>
             </div>
             <Clock className="w-12 h-12 text-[#1E3A5F] dark:text-[#2C5282] opacity-20" />
           </div>
@@ -104,7 +110,9 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">Completed</p>
-              <p className="text-3xl font-bold text-[#52C9A2] dark:text-[#52C9A2] mt-2">{completedRequests.length}</p>
+              <p className="text-3xl font-bold text-[#52C9A2] dark:text-[#52C9A2] mt-2">
+                {completedRequests.length}
+              </p>
             </div>
             <CheckCircle className="w-12 h-12 text-[#52C9A2] opacity-20" />
           </div>
@@ -113,28 +121,43 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
 
       {/* Maintenance Requests */}
       <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-lg border-2 border-[#E2E8F0] dark:border-[#3A4150] p-6">
-        <h2 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">Maintenance Requests</h2>
+        <h2 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">
+          Maintenance Requests
+        </h2>
 
         {maintenanceRequests.length === 0 ? (
-          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">No maintenance requests assigned to you</p>
+          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">
+            No maintenance requests assigned to you
+          </p>
         ) : (
           <div className="space-y-4">
             {maintenanceRequests.map((request) => (
-              <div key={request.maintenanceId} className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4">
+              <div
+                key={request.maintenanceId}
+                className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4"
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Wrench className="w-5 h-5 text-[#1E3A5F] dark:text-[#2C5282]" />
-                      <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">{request.equipmentName}</h3>
-                      <span className={`px-2 py-1 rounded text-xs ${
-                        request.status === 'COMPLETED' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
-                        request.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' :
-                        'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                      }`}>
+                      <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">
+                        {request.equipmentName}
+                      </h3>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${
+                          request.status === 'COMPLETED'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                            : request.status === 'IN_PROGRESS'
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                              : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                        }`}
+                      >
                         {request.status}
                       </span>
                     </div>
-                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0] mb-2">{request.description}</p>
+                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0] mb-2">
+                      {request.description}
+                    </p>
                     <div className="flex flex-wrap gap-4 text-sm text-[#2D3748] dark:text-[#B0B0B0]">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
@@ -143,7 +166,9 @@ export function TechnicianMaintenance({ user }: TechnicianMaintenanceProps) {
                       {request.nextMaintenanceDate && (
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          <span>Next: {new Date(request.nextMaintenanceDate).toLocaleDateString()}</span>
+                          <span>
+                            Next: {new Date(request.nextMaintenanceDate).toLocaleDateString()}
+                          </span>
                         </div>
                       )}
                       {request.maintenanceFrequencyDays && (
