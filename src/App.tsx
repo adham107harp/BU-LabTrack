@@ -30,7 +30,15 @@ const DarkModeContext = createContext<DarkModeContextType>({
 export const useDarkMode = () => useContext(DarkModeContext);
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'about' | 'login' | 'register' | 'registerInstructor' | 'registerTechnician' | 'registerDoctor' | 'app'>('about');
+  const [currentView, setCurrentView] = useState<
+    | 'about'
+    | 'login'
+    | 'register'
+    | 'registerInstructor'
+    | 'registerTechnician'
+    | 'registerDoctor'
+    | 'app'
+  >('about');
   const [user, setUser] = useState<User | null>(null);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -57,16 +65,38 @@ export default function App() {
           </div>
         )}
         {currentView === 'about' && <AboutLanding onGetStarted={() => setCurrentView('login')} />}
-        {currentView === 'login' && <Login onLogin={handleLogin} onShowRegister={(type?: string) => {
-          if (type === 'instructor') setCurrentView('registerInstructor');
-          else if (type === 'technician') setCurrentView('registerTechnician');
-          else if (type === 'doctor') setCurrentView('registerDoctor');
-          else setCurrentView('register');
-        }} />}
-        {currentView === 'register' && <Register onRegister={handleRegister} onBackToLogin={() => setCurrentView('login')} />}
-        {currentView === 'registerInstructor' && <RegisterInstructor onRegister={handleRegister} onBackToLogin={() => setCurrentView('login')} />}
-        {currentView === 'registerTechnician' && <RegisterTechnician onRegister={handleRegister} onBackToLogin={() => setCurrentView('login')} />}
-        {currentView === 'registerDoctor' && <RegisterDoctor onRegister={handleRegister} onBackToLogin={() => setCurrentView('login')} />}
+        {currentView === 'login' && (
+          <Login
+            onLogin={handleLogin}
+            onShowRegister={(type?: string) => {
+              if (type === 'instructor') setCurrentView('registerInstructor');
+              else if (type === 'technician') setCurrentView('registerTechnician');
+              else if (type === 'doctor') setCurrentView('registerDoctor');
+              else setCurrentView('register');
+            }}
+          />
+        )}
+        {currentView === 'register' && (
+          <Register onRegister={handleRegister} onBackToLogin={() => setCurrentView('login')} />
+        )}
+        {currentView === 'registerInstructor' && (
+          <RegisterInstructor
+            onRegister={handleRegister}
+            onBackToLogin={() => setCurrentView('login')}
+          />
+        )}
+        {currentView === 'registerTechnician' && (
+          <RegisterTechnician
+            onRegister={handleRegister}
+            onBackToLogin={() => setCurrentView('login')}
+          />
+        )}
+        {currentView === 'registerDoctor' && (
+          <RegisterDoctor
+            onRegister={handleRegister}
+            onBackToLogin={() => setCurrentView('login')}
+          />
+        )}
         {currentView === 'app' && user && (
           <MainApp
             user={user}

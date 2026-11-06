@@ -30,7 +30,9 @@ interface ResearchLabProps {
 }
 
 export function ResearchLab({ user }: ResearchLabProps) {
-  const [activeSection, setActiveSection] = useState<'projects' | 'equipment' | 'requests'>('projects');
+  const [activeSection, setActiveSection] = useState<'projects' | 'equipment' | 'requests'>(
+    'projects',
+  );
   const [searchTerm, setSearchTerm] = useState('');
   const [projects, setProjects] = useState<ResearchProject[]>([]);
   const [advancedEquipment, setAdvancedEquipment] = useState<AdvancedEquipment[]>([]);
@@ -44,17 +46,17 @@ export function ResearchLab({ user }: ResearchLabProps) {
         setLoading(true);
         setError(null);
         const backendResearch: BackendResearch[] = await api.get('/research');
-        
+
         // Filter research for current doctor only
-        const myResearch = backendResearch.filter(r => r.doctorEmail === user.email);
-        
+        const myResearch = backendResearch.filter((r) => r.doctorEmail === user.email);
+
         // Map backend research to frontend format
         const mappedProjects: ResearchProject[] = myResearch.map((research) => {
           // Determine status based on dates
           const today = new Date();
           const startDate = research.startDate ? new Date(research.startDate) : null;
           const endDate = research.endDate ? new Date(research.endDate) : null;
-          
+
           let status: 'active' | 'pending' | 'completed' = 'active';
           if (startDate && today < startDate) status = 'pending';
           else if (endDate && today > endDate) status = 'completed';
@@ -119,10 +121,11 @@ export function ResearchLab({ user }: ResearchLabProps) {
     }
   }, [user.role, activeSection]);
 
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.principal.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.lab.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProjects = projects.filter(
+    (project) =>
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.principal.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.lab.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const getStatusColor = (status: string) => {
@@ -158,9 +161,11 @@ export function ResearchLab({ user }: ResearchLabProps) {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-[#1E3A5F] dark:text-[#2C5282]">Research Laboratory</h1>
-          <p className="text-gray-600 dark:text-[#B0B0B0] mt-1">Manage research projects and advanced equipment</p>
+          <p className="text-gray-600 dark:text-[#B0B0B0] mt-1">
+            Manage research projects and advanced equipment
+          </p>
         </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white rounded-lg hover:shadow-lg transition-all">
+        <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white rounded-lg hover:shadow-lg transition-all">
           <Plus className="w-4 h-4" />
           New Research Project
         </button>
@@ -180,7 +185,7 @@ export function ResearchLab({ user }: ResearchLabProps) {
             onClick={() => setActiveSection('projects')}
             className={`px-4 py-2 rounded-lg transition-colors ${
               activeSection === 'projects'
-                  ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
+                ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
                 : 'bg-gray-100 dark:bg-[#2F3541] text-gray-700 dark:text-[#B0B0B0] hover:bg-gray-200 dark:hover:bg-[#3A4150]'
             }`}
           >
@@ -190,7 +195,7 @@ export function ResearchLab({ user }: ResearchLabProps) {
             onClick={() => setActiveSection('equipment')}
             className={`px-4 py-2 rounded-lg transition-colors ${
               activeSection === 'equipment'
-                  ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
+                ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
                 : 'bg-gray-100 dark:bg-[#2F3541] text-gray-700 dark:text-[#B0B0B0] hover:bg-gray-200 dark:hover:bg-[#3A4150]'
             }`}
           >
@@ -200,7 +205,7 @@ export function ResearchLab({ user }: ResearchLabProps) {
             onClick={() => setActiveSection('requests')}
             className={`px-4 py-2 rounded-lg transition-colors ${
               activeSection === 'requests'
-                  ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
+                ? 'bg-gradient-to-r from-[#E53E3E] to-[#1E3A5F] text-white'
                 : 'bg-gray-100 dark:bg-[#2F3541] text-gray-700 dark:text-[#B0B0B0] hover:bg-gray-200 dark:hover:bg-[#3A4150]'
             }`}
           >
@@ -220,28 +225,37 @@ export function ResearchLab({ user }: ResearchLabProps) {
                 placeholder="Search research projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                 className="w-full pl-10 pr-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-white dark:bg-[#2F3541] text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#2C5282]"
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#E2E8F0] dark:border-[#3A4150] bg-white dark:bg-[#2F3541] text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] dark:focus:ring-[#2C5282]"
               />
             </div>
           </div>
 
           {loading ? (
             <div className="flex items-center justify-center py-12">
-               <Loader2 className="w-8 h-8 text-[#1E3A5F] dark:text-[#2C5282] animate-spin" />
-              <span className="ml-3 text-gray-600 dark:text-[#B0B0B0]">Loading research projects...</span>
+              <Loader2 className="w-8 h-8 text-[#1E3A5F] dark:text-[#2C5282] animate-spin" />
+              <span className="ml-3 text-gray-600 dark:text-[#B0B0B0]">
+                Loading research projects...
+              </span>
             </div>
           ) : filteredProjects.length === 0 ? (
             <div className="bg-white dark:bg-[#252932] rounded-lg shadow p-12 text-center text-gray-500 dark:text-[#B0B0B0] border-2 border-[#EADFB4] dark:border-[#3A4150]">
-              {searchTerm ? 'No research projects found matching your search.' : 'No research projects available.'}
+              {searchTerm
+                ? 'No research projects found matching your search.'
+                : 'No research projects available.'}
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredProjects.map((project) => (
-                <div key={project.id} className="bg-white dark:bg-[#252932] rounded-lg shadow hover:shadow-lg transition-shadow border-2 border-[#EADFB4] dark:border-[#3A4150]">
+                <div
+                  key={project.id}
+                  className="bg-white dark:bg-[#252932] rounded-lg shadow hover:shadow-lg transition-shadow border-2 border-[#EADFB4] dark:border-[#3A4150]"
+                >
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
-                       <h3 className="flex-1 text-[#1E3A5F] dark:text-[#2C5282]">{project.title}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(project.status)}`}>
+                      <h3 className="flex-1 text-[#1E3A5F] dark:text-[#2C5282]">{project.title}</h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs ${getStatusColor(project.status)}`}
+                      >
                         {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                       </span>
                     </div>
@@ -253,7 +267,9 @@ export function ResearchLab({ user }: ResearchLabProps) {
                       </div>
                       <div className="flex items-center gap-2 text-gray-700 dark:text-[#B0B0B0]">
                         <Calendar className="w-4 h-4 text-gray-400 dark:text-[#6B6B6B]" />
-                        <span className="text-sm">{project.startDate} to {project.endDate}</span>
+                        <span className="text-sm">
+                          {project.startDate} to {project.endDate}
+                        </span>
                       </div>
                     </div>
 
@@ -264,7 +280,9 @@ export function ResearchLab({ user }: ResearchLabProps) {
                       </div>
                       <div>
                         <p className="text-xs text-gray-600 dark:text-[#B0B0B0]">Team Size</p>
-                        <p className="text-sm text-gray-900 dark:text-white">{project.teamSize} members</p>
+                        <p className="text-sm text-gray-900 dark:text-white">
+                          {project.teamSize} members
+                        </p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-600 dark:text-[#B0B0B0]">Budget</p>
@@ -291,7 +309,8 @@ export function ResearchLab({ user }: ResearchLabProps) {
               <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400 mt-0.5" />
               <div>
                 <p className="text-orange-900 dark:text-orange-300">
-                  {advancedEquipment.filter(eq => eq.status === 'maintenance').length} equipment item(s) currently under maintenance
+                  {advancedEquipment.filter((eq) => eq.status === 'maintenance').length} equipment
+                  item(s) currently under maintenance
                 </p>
               </div>
             </div>
@@ -302,35 +321,58 @@ export function ResearchLab({ user }: ResearchLabProps) {
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-[#2F3541]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Equipment</th>
+                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">
+                      Equipment
+                    </th>
                     <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Model</th>
                     <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Lab</th>
-                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Status</th>
-                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Next Maintenance</th>
+                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">
+                      Next Maintenance
+                    </th>
                     <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Cost</th>
-                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">Action</th>
+                    <th className="px-6 py-3 text-left text-gray-600 dark:text-[#B0B0B0]">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EADFB4] dark:divide-[#3A4150]">
                   {advancedEquipment.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-8 text-center text-gray-500 dark:text-[#B0B0B0]">
+                      <td
+                        colSpan={7}
+                        className="px-6 py-8 text-center text-gray-500 dark:text-[#B0B0B0]"
+                      >
                         No advanced equipment available.
                       </td>
                     </tr>
                   ) : (
                     advancedEquipment.map((equipment) => (
                       <tr key={equipment.id} className="hover:bg-gray-50 dark:hover:bg-[#2F3541]">
-                        <td className="px-6 py-4 text-gray-900 dark:text-white">{equipment.name}</td>
-                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">{equipment.model}</td>
-                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">{equipment.lab}</td>
+                        <td className="px-6 py-4 text-gray-900 dark:text-white">
+                          {equipment.name}
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">
+                          {equipment.model}
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">
+                          {equipment.lab}
+                        </td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(equipment.status)}`}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs ${getStatusColor(equipment.status)}`}
+                          >
                             {equipment.status.charAt(0).toUpperCase() + equipment.status.slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">{equipment.nextMaintenance}</td>
-                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">{equipment.cost}</td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">
+                          {equipment.nextMaintenance}
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-[#B0B0B0]">
+                          {equipment.cost}
+                        </td>
                         <td className="px-6 py-4">
                           <button
                             disabled={equipment.status !== 'operational'}
@@ -358,7 +400,7 @@ export function ResearchLab({ user }: ResearchLabProps) {
         <div className="bg-white dark:bg-[#252932] rounded-lg shadow p-8 border-2 border-[#EADFB4] dark:border-[#3A4150]">
           <div className="text-center">
             <Users className="w-16 h-16 text-gray-300 dark:text-[#6B6B6B] mx-auto mb-4" />
-             <h2 className="mb-2 text-[#1E3A5F] dark:text-[#2C5282]">Access Requests</h2>
+            <h2 className="mb-2 text-[#1E3A5F] dark:text-[#2C5282]">Access Requests</h2>
             <p className="text-gray-600 dark:text-[#B0B0B0] mb-6">
               Review and approve student requests for research lab access
             </p>

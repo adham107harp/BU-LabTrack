@@ -15,7 +15,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
   const [selectedLab, setSelectedLab] = useState<Lab | null>(null);
   const [showAddEquipment, setShowAddEquipment] = useState(false);
   const [newEquipmentName, setNewEquipmentName] = useState('');
-  const [equipmentStatus, setEquipmentStatus] = useState<'AVAILABLE' | 'UNAVAILABLE' | 'MAINTENANCE'>('AVAILABLE');
+  const [equipmentStatus, setEquipmentStatus] = useState<
+    'AVAILABLE' | 'UNAVAILABLE' | 'MAINTENANCE'
+  >('AVAILABLE');
 
   useEffect(() => {
     fetchData();
@@ -25,21 +27,22 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Fetch all labs and filter by instructor
       const allLabs: Lab[] = await api.get('/labs');
-      const instructorLabs = allLabs.filter(lab => 
-        lab.instructor?.instructorId === parseInt(user.id)
+      const instructorLabs = allLabs.filter(
+        (lab) => lab.instructor?.instructorId === parseInt(user.id),
       );
       setMyLabs(instructorLabs);
 
       // Fetch pending reservations
       const allReservations: Reservation[] = await api.get('/reservations');
-      const pending = allReservations.filter(res => 
-        res.status === 'PENDING' && 
-        // Use the labs fetched above: the myLabs state is not updated until
-        // the next render, so on first load it is still empty.
-        instructorLabs.some(lab => lab.labId === res.equipment?.lab?.labId)
+      const pending = allReservations.filter(
+        (res) =>
+          res.status === 'PENDING' &&
+          // Use the labs fetched above: the myLabs state is not updated until
+          // the next render, so on first load it is still empty.
+          instructorLabs.some((lab) => lab.labId === res.equipment?.lab?.labId),
       );
       setPendingReservations(pending);
     } catch (err: any) {
@@ -107,7 +110,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#1E3A5F] to-[#2C5282] dark:from-[#2F3541] dark:to-[#252932] text-white rounded-lg shadow-lg p-6">
         <h1 className="text-white mb-2">Welcome, {user.name}!</h1>
-        <p className="text-white/90 dark:text-[#2C5282]">Manage your labs and approve reservations</p>
+        <p className="text-white/90 dark:text-[#2C5282]">
+          Manage your labs and approve reservations
+        </p>
       </div>
 
       {error && (
@@ -122,7 +127,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">My Labs</p>
-              <p className="text-3xl font-bold text-[#1E3A5F] dark:text-[#2C5282] mt-2">{myLabs.length}</p>
+              <p className="text-3xl font-bold text-[#1E3A5F] dark:text-[#2C5282] mt-2">
+                {myLabs.length}
+              </p>
             </div>
             <Beaker className="w-12 h-12 text-[#1E3A5F] dark:text-[#2C5282] opacity-20" />
           </div>
@@ -131,8 +138,12 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
         <div className="bg-[#FFFFFF] dark:bg-[#252932] rounded-lg shadow-lg p-6 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">Pending Reservations</p>
-              <p className="text-3xl font-bold text-[#E53E3E] dark:text-[#E53E3E] mt-2">{pendingReservations.length}</p>
+              <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">
+                Pending Reservations
+              </p>
+              <p className="text-3xl font-bold text-[#E53E3E] dark:text-[#E53E3E] mt-2">
+                {pendingReservations.length}
+              </p>
             </div>
             <AlertCircle className="w-12 h-12 text-[#E53E3E] opacity-20" />
           </div>
@@ -141,7 +152,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
         <div className="bg-[#FFFFFF] dark:bg-[#252932] rounded-lg shadow-lg p-6 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">Total Equipment</p>
+              <p className="text-[#2D3748] dark:text-[#B0B0B0] text-sm font-medium">
+                Total Equipment
+              </p>
               <p className="text-3xl font-bold text-[#52C9A2] dark:text-[#52C9A2] mt-2">
                 {myLabs.reduce((sum, lab) => sum + (lab.equipmentList?.length || 0), 0)}
               </p>
@@ -158,14 +171,21 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
         </div>
 
         {myLabs.length === 0 ? (
-          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">No labs assigned to you</p>
+          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">
+            No labs assigned to you
+          </p>
         ) : (
           <div className="space-y-4">
             {myLabs.map((lab) => (
-              <div key={lab.labId} className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4">
+              <div
+                key={lab.labId}
+                className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">{lab.labName}</h3>
+                    <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">
+                      {lab.labName}
+                    </h3>
                     <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0]">{lab.location}</p>
                   </div>
                   <div className="flex gap-2">
@@ -183,15 +203,24 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
                 </div>
 
                 <div className="mt-4">
-                  <h4 className="text-sm font-medium text-[#1A202C] dark:text-[#E8E8E8] mb-2">Equipment:</h4>
+                  <h4 className="text-sm font-medium text-[#1A202C] dark:text-[#E8E8E8] mb-2">
+                    Equipment:
+                  </h4>
                   {lab.equipmentList && lab.equipmentList.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {lab.equipmentList.map((eq, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-[#FFFFFF] dark:bg-[#2F3541] rounded">
-                          <span className="text-sm text-[#1A202C] dark:text-[#E8E8E8]">{eq.equipmentName}</span>
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-2 bg-[#FFFFFF] dark:bg-[#2F3541] rounded"
+                        >
+                          <span className="text-sm text-[#1A202C] dark:text-[#E8E8E8]">
+                            {eq.equipmentName}
+                          </span>
                           <select
                             value={eq.status}
-                            onChange={(e) => handleUpdateEquipmentStatus(eq.equipmentName, e.target.value)}
+                            onChange={(e) =>
+                              handleUpdateEquipmentStatus(eq.equipmentName, e.target.value)
+                            }
                             className="text-xs px-2 py-1 border border-[#E2E8F0] dark:border-[#3A4150] rounded bg-[#FFFFFF] dark:bg-[#252932] text-[#1A202C] dark:text-[#E8E8E8]"
                           >
                             <option value="AVAILABLE">Available</option>
@@ -202,7 +231,9 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0]">No equipment in this lab</p>
+                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0]">
+                      No equipment in this lab
+                    </p>
                   )}
                 </div>
               </div>
@@ -213,24 +244,36 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
 
       {/* Pending Reservations */}
       <div className="bg-[#FFFFFF] dark:bg-[#252932] rounded-lg shadow-lg border-2 border-[#E2E8F0] dark:border-[#3A4150] p-6">
-        <h2 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">Pending Reservations</h2>
+        <h2 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">
+          Pending Reservations
+        </h2>
 
         {pendingReservations.length === 0 ? (
-          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">No pending reservations</p>
+          <p className="text-center py-8 text-[#2D3748] dark:text-[#B0B0B0]">
+            No pending reservations
+          </p>
         ) : (
           <div className="space-y-4">
             {pendingReservations.map((reservation) => (
-              <div key={reservation.reservationId} className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4">
+              <div
+                key={reservation.reservationId}
+                className="border-2 border-[#E2E8F0] dark:border-[#3A4150] rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">{reservation.equipment.equipmentName}</h3>
+                    <h3 className="font-semibold text-[#1A202C] dark:text-[#E8E8E8]">
+                      {reservation.equipment.equipmentName}
+                    </h3>
                     <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0]">
                       Student: {reservation.student.name} ({reservation.student.email})
                     </p>
                     <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0]">
-                      Date: {reservation.date} | Time: {reservation.time} | Duration: {reservation.duration} hours
+                      Date: {reservation.date} | Time: {reservation.time} | Duration:{' '}
+                      {reservation.duration} hours
                     </p>
-                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0] mt-1">Purpose: {reservation.purpose}</p>
+                    <p className="text-sm text-[#2D3748] dark:text-[#B0B0B0] mt-1">
+                      Purpose: {reservation.purpose}
+                    </p>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -259,10 +302,14 @@ export function InstructorDashboard({ user }: InstructorDashboardProps) {
       {showAddEquipment && selectedLab && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-[#FFFFFF] dark:bg-[#252932] rounded-lg shadow-xl max-w-md w-full p-6 border-2 border-[#E2E8F0] dark:border-[#3A4150]">
-            <h3 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">Add Equipment to {selectedLab.labName}</h3>
+            <h3 className="text-xl font-semibold text-[#1A202C] dark:text-[#E8E8E8] mb-4">
+              Add Equipment to {selectedLab.labName}
+            </h3>
             <form onSubmit={handleAddEquipment} className="space-y-4">
               <div>
-                <label className="block text-[#1A202C] dark:text-[#E8E8E8] mb-2">Equipment Name</label>
+                <label className="block text-[#1A202C] dark:text-[#E8E8E8] mb-2">
+                  Equipment Name
+                </label>
                 <input
                   type="text"
                   value={newEquipmentName}

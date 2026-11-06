@@ -73,7 +73,11 @@ export const removeAuthToken = () => {
 // API functions
 export const api = {
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) { const r = await demoBackend.register('student', data); setAuthToken(r.token); return r; }
+    if (DEMO_MODE) {
+      const r = await demoBackend.register('student', data);
+      setAuthToken(r.token);
+      return r;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: {
@@ -93,7 +97,11 @@ export const api = {
   },
 
   async registerInstructor(data: InstructorRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) { const r = await demoBackend.register('instructor', data); setAuthToken(r.token); return r; }
+    if (DEMO_MODE) {
+      const r = await demoBackend.register('instructor', data);
+      setAuthToken(r.token);
+      return r;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/register/instructor`, {
       method: 'POST',
       headers: {
@@ -113,7 +121,11 @@ export const api = {
   },
 
   async registerTechnician(data: TechnicianRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) { const r = await demoBackend.register('technician', data); setAuthToken(r.token); return r; }
+    if (DEMO_MODE) {
+      const r = await demoBackend.register('technician', data);
+      setAuthToken(r.token);
+      return r;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/register/technician`, {
       method: 'POST',
       headers: {
@@ -133,7 +145,11 @@ export const api = {
   },
 
   async registerDoctor(data: DoctorRegisterRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) { const r = await demoBackend.register('doctor', data); setAuthToken(r.token); return r; }
+    if (DEMO_MODE) {
+      const r = await demoBackend.register('doctor', data);
+      setAuthToken(r.token);
+      return r;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/register/doctor`, {
       method: 'POST',
       headers: {
@@ -153,7 +169,11 @@ export const api = {
   },
 
   async login(data: LoginRequest): Promise<AuthResponse> {
-    if (DEMO_MODE) { const r = await demoBackend.login(data.email); setAuthToken(r.token); return r; }
+    if (DEMO_MODE) {
+      const r = await demoBackend.login(data.email);
+      setAuthToken(r.token);
+      return r;
+    }
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
@@ -188,7 +208,9 @@ export const api = {
         removeAuthToken();
         throw new Error('Unauthorized. Please login again.');
       }
-      const error: ErrorResponse = await response.json().catch(() => ({ message: `Failed to fetch ${endpoint}` }));
+      const error: ErrorResponse = await response
+        .json()
+        .catch(() => ({ message: `Failed to fetch ${endpoint}` }));
       throw new Error(error.message || `Failed to fetch ${endpoint}`);
     }
 
@@ -212,7 +234,9 @@ export const api = {
         removeAuthToken();
         throw new Error('Unauthorized. Please login again.');
       }
-      const error: ErrorResponse = await response.json().catch(() => ({ message: `Failed to post to ${endpoint}` }));
+      const error: ErrorResponse = await response
+        .json()
+        .catch(() => ({ message: `Failed to post to ${endpoint}` }));
       throw new Error(error.message || `Failed to post to ${endpoint}`);
     }
 
@@ -236,7 +260,9 @@ export const api = {
         removeAuthToken();
         throw new Error('Unauthorized. Please login again.');
       }
-      const error: ErrorResponse = await response.json().catch(() => ({ message: `Failed to put to ${endpoint}` }));
+      const error: ErrorResponse = await response
+        .json()
+        .catch(() => ({ message: `Failed to put to ${endpoint}` }));
       throw new Error(error.message || `Failed to put to ${endpoint}`);
     }
 
@@ -259,7 +285,9 @@ export const api = {
         removeAuthToken();
         throw new Error('Unauthorized. Please login again.');
       }
-      const error: ErrorResponse = await response.json().catch(() => ({ message: `Failed to delete ${endpoint}` }));
+      const error: ErrorResponse = await response
+        .json()
+        .catch(() => ({ message: `Failed to delete ${endpoint}` }));
       throw new Error(error.message || `Failed to delete ${endpoint}`);
     }
   },
@@ -352,4 +380,3 @@ export interface Research {
   startDate: string;
   endDate: string;
 }
-

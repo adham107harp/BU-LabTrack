@@ -22,7 +22,9 @@ describe('login (each role)', () => {
   });
 
   it('is case/whitespace insensitive and rejects unknown users', async () => {
-    await expect(demoBackend.login('  STUDENT@demo.bu.edu ')).resolves.toMatchObject({ role: 'student' });
+    await expect(demoBackend.login('  STUDENT@demo.bu.edu ')).resolves.toMatchObject({
+      role: 'student',
+    });
     await expect(demoBackend.login('nobody@x.edu')).rejects.toThrow(/demo accounts/i);
   });
 
@@ -36,11 +38,17 @@ describe('login (each role)', () => {
 
 describe('registration', () => {
   it('rejects duplicate emails', async () => {
-    await expect(demoBackend.register('student', { name: 'Dup', email: 'student@demo.bu.edu' })).rejects.toThrow(/already exists/);
+    await expect(
+      demoBackend.register('student', { name: 'Dup', email: 'student@demo.bu.edu' }),
+    ).rejects.toThrow(/already exists/);
   });
 
   it('registers a new technician', async () => {
-    const res = await demoBackend.register('technician', { name: 'New Tech', email: 'new.tech@demo.bu.edu', technicianId: 777 });
+    const res = await demoBackend.register('technician', {
+      name: 'New Tech',
+      email: 'new.tech@demo.bu.edu',
+      technicianId: 777,
+    });
     expect(res.role).toBe('technician');
     expect(res.technicianId).toBe(777);
   });
@@ -48,8 +56,14 @@ describe('registration', () => {
 
 describe('student flow: reservations', () => {
   const base = {
-    equipmentName: 'Oscilloscope', studentId: 1, date: '2099-01-01', time: '10:00',
-    duration: 60, purpose: 'test', reservationType: 'INDIVIDUAL', teamSize: 1,
+    equipmentName: 'Oscilloscope',
+    studentId: 1,
+    date: '2099-01-01',
+    time: '10:00',
+    duration: 60,
+    purpose: 'test',
+    reservationType: 'INDIVIDUAL',
+    teamSize: 1,
   };
 
   it('creates a pending reservation visible to the student, then detects the conflict', async () => {
@@ -57,7 +71,9 @@ describe('student flow: reservations', () => {
     const created = await demoBackend.post('/reservations', { ...base, equipmentName: equipment });
     expect(created.status).toBe('PENDING');
     const mine = await demoBackend.get('/reservations/student/1');
-    expect(mine.some((r: { reservationId: number }) => r.reservationId === created.reservationId)).toBe(true);
+    expect(
+      mine.some((r: { reservationId: number }) => r.reservationId === created.reservationId),
+    ).toBe(true);
     const q = `/reservations/check-availability?equipmentName=${encodeURIComponent(equipment)}&date=2099-01-01&startTime=10:30&endTime=11:30`;
     expect(await demoBackend.get(q)).toBe(false);
     const free = q.replace('startTime=10:30&endTime=11:30', 'startTime=12:00&endTime=13:00');
@@ -69,11 +85,21 @@ describe('instructor flow: approval', () => {
   it('approves and rejects reservations; unknown id errors', async () => {
     const equipment = (await demoBackend.get('/equipment'))[0].equipmentName as string;
     const r = await demoBackend.post('/reservations', {
-      equipmentName: equipment, studentId: 1, date: '2099-02-01', time: '09:00',
-      duration: 30, purpose: 'p', reservationType: 'INDIVIDUAL', teamSize: 1,
+      equipmentName: equipment,
+      studentId: 1,
+      date: '2099-02-01',
+      time: '09:00',
+      duration: 30,
+      purpose: 'p',
+      reservationType: 'INDIVIDUAL',
+      teamSize: 1,
     });
-    expect((await demoBackend.put(`/reservations/${r.reservationId}/approve`, {})).status).toBe('APPROVED');
-    expect((await demoBackend.put(`/reservations/${r.reservationId}/reject`, {})).status).toBe('REJECTED');
+    expect((await demoBackend.put(`/reservations/${r.reservationId}/approve`, {})).status).toBe(
+      'APPROVED',
+    );
+    expect((await demoBackend.put(`/reservations/${r.reservationId}/reject`, {})).status).toBe(
+      'REJECTED',
+    );
     await expect(demoBackend.put('/reservations/99999/approve', {})).rejects.toThrow(/not found/i);
   });
 });
@@ -81,7 +107,9 @@ describe('instructor flow: approval', () => {
 describe('technician flow: equipment + maintenance', () => {
   it('changes equipment status and lists maintenance for a technician', async () => {
     const name = (await demoBackend.get('/equipment'))[0].equipmentName as string;
-    const updated = await demoBackend.put(`/equipment/${encodeURIComponent(name)}/status`, { status: 'MAINTENANCE' });
+    const updated = await demoBackend.put(`/equipment/${encodeURIComponent(name)}/status`, {
+      status: 'MAINTENANCE',
+    });
     expect(updated.status).toBe('MAINTENANCE');
     const list = await demoBackend.get('/maintenance-requests/technician/3');
     expect(Array.isArray(list)).toBe(true);
@@ -89,14 +117,22 @@ describe('technician flow: equipment + maintenance', () => {
 
   it('rejects duplicate equipment names', async () => {
     const e = (await demoBackend.get('/equipment'))[0];
-    await expect(demoBackend.post('/equipment', { equipmentName: e.equipmentName, labId: 1 })).rejects.toThrow(/already exists/);
+    await expect(
+      demoBackend.post('/equipment', { equipmentName: e.equipmentName, labId: 1 }),
+    ).rejects.toThrow(/already exists/);
   });
 });
 
 describe('shared tools ownership', () => {
   it('only the owner may delete', async () => {
-    const tool = await demoBackend.post('/shared-tools', { toolName: 'Drill', description: 'd', ownerStudentId: 1 });
-    await expect(demoBackend.delete(`/shared-tools/${tool.toolId}?ownerStudentId=2`)).rejects.toThrow(/only delete your own/);
+    const tool = await demoBackend.post('/shared-tools', {
+      toolName: 'Drill',
+      description: 'd',
+      ownerStudentId: 1,
+    });
+    await expect(
+      demoBackend.delete(`/shared-tools/${tool.toolId}?ownerStudentId=2`),
+    ).rejects.toThrow(/only delete your own/);
     await demoBackend.delete(`/shared-tools/${tool.toolId}?ownerStudentId=1`);
     const all = await demoBackend.get('/shared-tools');
     expect(all.some((t: { toolId: number }) => t.toolId === tool.toolId)).toBe(false);

@@ -8,8 +8,10 @@ Updated at the end of every automated run.
 - 2026-10-30: CI workflow (`.github/workflows/ci.yml`): typecheck, tests, build, build:demo.
 - 2026-10-30: ESLint 9 flat config (`npm run lint`, errors fail CI; `any` and React-compiler rules are warnings for now). Login component tests (4 roles + failure path); suite is 20 tests.
 
+- 2026-10-30: Prettier (`npm run format` / `format:check`, enforced in CI; `src/components/ui` and docs excluded).
+
 ## Next (highest value first)
-1. Prettier config (needs a one-off repo-wide format commit), then burn down ESLint warnings (45 `any`, 8 react-hooks warnings: fetch-in-effect / hoisted callbacks in dashboards).
+1. Burn down ESLint warnings (45 `any`, 8 react-hooks warnings: fetch-in-effect / hoisted callbacks in dashboards).
 2. Component tests for the role dashboards, reservation and maintenance screens.
 3. Playwright e2e against `build:demo`.
 4. Token storage: JWT lives in `localStorage` (`authToken`) - XSS-readable; move to httpOnly cookie once the API supports it, or at minimum add expiry handling and clear on 401.

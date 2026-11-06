@@ -11,7 +11,9 @@ describe('<Login /> (demo mode)', () => {
     render(<Login onLogin={onLogin} onShowRegister={() => {}} />);
 
     const demoBox = screen.getByText(/demo mode: pick an account/i).parentElement as HTMLElement;
-    await user.click(within(demoBox).getByRole('button', { name: new RegExp(`^${acct.role}$`, 'i') }));
+    await user.click(
+      within(demoBox).getByRole('button', { name: new RegExp(`^${acct.role}$`, 'i') }),
+    );
     expect(screen.getByLabelText(/email/i)).toHaveValue(acct.email);
 
     await user.click(screen.getByRole('button', { name: /sign in|log in|login/i }));

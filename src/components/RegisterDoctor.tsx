@@ -34,7 +34,6 @@ export function RegisterDoctor({ onRegister, onBackToLogin }: RegisterDoctorProp
       return;
     }
 
-
     setLoading(true);
 
     try {
@@ -78,14 +77,18 @@ export function RegisterDoctor({ onRegister, onBackToLogin }: RegisterDoctorProp
             onClick={toggleDarkMode}
             className="p-3 bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border-2 border-[#E2E8F0] dark:border-[#3A4150]"
           >
-            {darkMode ? <Sun className="w-5 h-5 text-[#E53E3E]" /> : <Moon className="w-5 h-5 text-[#1E3A5F]" />}
+            {darkMode ? (
+              <Sun className="w-5 h-5 text-[#E53E3E]" />
+            ) : (
+              <Moon className="w-5 h-5 text-[#1E3A5F]" />
+            )}
           </button>
         </div>
 
         {/* Register Form */}
         <div className="bg-[#F8F9FA] dark:bg-[#252932] rounded-lg shadow-2xl p-8 animate-slideInLeft border-2 border-[#E2E8F0] dark:border-[#3A4150]">
           <h2 className="mb-6 text-center text-[#1E3A5F] dark:text-[#2C5282]">Doctor Account</h2>
-          
+
           {error && (
             <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg text-sm">
               {error}
@@ -144,7 +147,10 @@ export function RegisterDoctor({ onRegister, onBackToLogin }: RegisterDoctorProp
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-[#1A202C] dark:text-[#B0B0B0] mb-2"
+              >
                 Confirm Password *
               </label>
               <input
